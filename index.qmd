@@ -6,16 +6,16 @@ about:
   links:
     - icon: twitter
       text: Twitter
-      href: https://twitter.com
+      href: https://x.com/Data_General1
     - icon: linkedin
       text: LinkedIn
       href: https://www.linkedin.com/in/ayorindeayomide/
     - icon: github
       text: Github
-      href: https://github.com/Aysquare
+      href: https://github.com/Ayo-Ayorinde
 
 ---
 
-Ayorinde Ayomide David is a budding data analyst with a B.Sc. in Statistics from the Federal University of Agriculture, Abeokuta. With a strong foundation in statistical methods and a passion for data-driven solutions, he specializes in transforming raw data into actionable insights to support research, business, and policy decisions.
+Ayorinde Ayomide David is a data specialist with a B.Sc. in Statistics from the Federal University of Agriculture, Abeokuta. With a strong foundation in statistical methods and a passion for data-driven solutions, he specializes in transforming raw data into actionable insights to support research, business, and policy decisions.
 
-He currently serves as a Journey and Tracking Manager at KaySky Nigeria Limited, where he oversees fleet performance, delivery efficiency, and compliance. He also contributes remotely as a Research Assistant at the Institute of Health Research and Development, supporting literature reviews, data cleaning, and research reporting.
+He currently works with KaySky Nigeria Limited as a Journey and Tracking Manager, where he plays a key role in monitoring fleet performance, enhancing delivery efficiency, and ensuring compliance with safety and operational standards.
