@@ -1,0 +1,44 @@
+[
+  {
+    "objectID": "posts/welcome/index.html",
+    "href": "posts/welcome/index.html",
+    "title": "Welcome To My Blog",
+    "section": "",
+    "text": "This is the first post in a Quarto blog. Welcome!\n\nSince this post doesn’t specify an explicit image, the first image in the post will be used in the listing page of posts."
+  },
+  {
+    "objectID": "portfolio.html",
+    "href": "portfolio.html",
+    "title": "my_website",
+    "section": "",
+    "text": "Analysis of DHS Data\n\n\n\ncode\n\n\nanalysis\n\n\nr\n\n\n\n\n\n\n\nAyorinde Ayomide David\n\n\nJul 12, 2025\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\nnews\n\n\n\n\n\n\n\nAyorinde Ayomide David\n\n\nJul 9, 2025\n\n\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Ayorinde Ayomide David",
+    "section": "",
+    "text": "Ayorinde Ayomide David is a budding data analyst with a B.Sc. in Statistics from the Federal University of Agriculture, Abeokuta. With a strong foundation in statistical methods and a passion for data-driven solutions, he specializes in transforming raw data into actionable insights to support research, business, and policy decisions.\nHe currently serves as a Journey and Tracking Manager at KaySky Nigeria Limited, where he oversees fleet performance, delivery efficiency, and compliance. He also contributes remotely as a Research Assistant at the Institute of Health Research and Development, supporting literature reviews, data cleaning, and research reporting."
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "About this blog"
+  },
+  {
+    "objectID": "index_old.html",
+    "href": "index_old.html",
+    "title": "my_website",
+    "section": "",
+    "text": "Analysis of DHS Data\n\n\n\n\n\n\ncode\n\n\nanalysis\n\n\nr\n\n\n\n\n\n\n\n\n\nJul 12, 2025\n\n\nAyorinde Ayomide David\n\n\n\n\n\n\n\n\n\n\n\n\nWelcome To My Blog\n\n\n\n\n\n\nnews\n\n\n\n\n\n\n\n\n\nJul 9, 2025\n\n\nAyorinde Ayomide David\n\n\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/post-with-code/index.html",
+    "href": "posts/post-with-code/index.html",
+    "title": "Post With Code",
+    "section": "",
+    "text": "This is a post with executable code.\n\n1 + 1\n\n[1] 2"
+  }
+]

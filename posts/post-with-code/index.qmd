@@ -1,0 +1,13 @@
+---
+title: "Analysis of DHS Data"
+author: "Ayorinde Ayomide David"
+date: "2025-07-12"
+categories: [code, analysis, r]
+image: "image.jpg"
+---
+
+This is a project using DHS data. You can find the project [here]()
+
+```{r}
+1 + 1
+```
