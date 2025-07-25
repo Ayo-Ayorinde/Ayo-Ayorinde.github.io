@@ -6,6 +6,7 @@ website:
   title: "Ayorinde Ayomide David"
   favicon: favicon.png
   navbar:
+  
       left: 
         - text: "Home"
           file: index.qmd
@@ -20,6 +21,9 @@ website:
         href: https://x.com/Data_General1
       - icon: github
         href: https://github.com/Ayo-Ayorinde
+  page-footer: 
+    center: "© 2025 Ayomide Ayorinde • Powered by Quarto & GitHub Pages"
+
 format:
   html:
     theme:

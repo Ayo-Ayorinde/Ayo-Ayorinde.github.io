@@ -16,6 +16,8 @@ about:
 
 ---
 
-Ayorinde Ayomide David is a data specialist with a B.Sc. in Statistics from the Federal University of Agriculture, Abeokuta. With a strong foundation in statistical methods and a passion for data-driven solutions, he specializes in transforming raw data into actionable insights to support research, business, and policy decisions.
+**Ayorinde Ayomide David** is a data specialist with a B.Sc. in Statistics from the Federal University of Agriculture, Abeokuta. With a strong foundation in statistical methods and a passion for data-driven solutions, he specializes in transforming raw data into actionable insights to support research, business, and policy decisions.
 
-He currently works with KaySky Nigeria Limited as a Journey and Tracking Manager, where he plays a key role in monitoring fleet performance, enhancing delivery efficiency, and ensuring compliance with safety and operational standards.
+He currently works with **KaySky Nigeria Limited** as a **Journey and Tracking Manager**, where he plays a key role in monitoring fleet performance, enhancing delivery efficiency, and ensuring compliance with safety and operational standards.
+
+
