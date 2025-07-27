@@ -1,17 +1,31 @@
 ---
-title: "Statistical Analysis of COVID-19 dataset"
+title: "Analysis of COVID-19 dataset"
 author: "Ayorinde Ayomide David"
-date: "2025-07-12"
+date: "2025-07-27"
 categories: [code, analysis, r]
 image: "image.jpg"
 ---
 
-This is a project carried out to test if there is a significance difference between the age of COVID-19 patients who are alive and dead.
+In this project, I explored a COVID-19 dataset using R to validate (or challenge) some of the claims and narratives that circulated during the pandemic.
 
-Additionally, this project explores the relationship between the status of life i.e dead or alive and gender.
+The analysis covered:
 
-You can find the data for the project [here](https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbWlxR2UxWHlxVEVZZ3M4UlI1bi1pOXllTDF2QXxBQ3Jtc0ttMW5waktJUFNvRUo5WE1CVl9kcl95TVF4X1RoTWpoOHc1UVUxSGJYOGlHeS1RLWU3MTVob1JueHhfN2tuQ1JsMDkyem1ZYUNwenVvVUNlNzZjQWY2cHFCdXNBZUx5YWlieXk4dy04ZmZxWXhXMUFENA&q=https%3A%2F%2Fwww.kaggle.com%2Fsudalairajkumar%2Fnovel-corona-virus-2019-dataset%2Fdownload%2FuMF6QnlPB7ScS6BxTw1I%252Fversions%252Fe03zBLHwzT7b8fR01UTk%252Ffiles%252FCOVID19_line_list_data.csv%3FdatasetVersionNumber%3D25&v=D_CNmYkGRUc)
+• Data cleaning and pre-processing
 
+• Data visualization
+
+• Statistical techniques and hypothesis testing
+
+You can find the data for the project [here](https://github.com/Ayo-Ayorinde/COVID-19_Statistical_Analysis/tree/master/Data)
+
+---
+title: "Analysis of COVID-19 Dataset"
+author: "Ayorinde Ayomide David"
+date: "`r Sys.Date()`"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -19,11 +33,20 @@ knitr::opts_chunk$set(
 	message = FALSE,
 	warning = FALSE
 )
-if(!require(pacman)) install.packages("pacman")
+
+```
+
+### Importing the dependencies
+
+```{r}
+if(!require(pacman)) install.packages("pacman")  # Installing the package manager
 
 pacman::p_load(tidyverse, # Metapackage
-               here, # Used to coerce Rmarkdown into reading our dataset from a seperate folder
-               Hmisc
+               here, # R library for coercing Rmarkdown into reading dataset from a seperate folder
+               visdat, # R library for graphical inspection of dataset
+               inspectdf, # R library for the distribution of variables 
+               gtsummary,
+               ggplot2
                )
 ```
 
@@ -37,60 +60,126 @@ covid <- read_csv(here("posts/Statistical_Analysis_of_COVID-19_dataset/data/COVI
 ### Exploring and inspecting the dataset
 
 ```{r message=FALSE, warning=FALSE}
-view(covid)
+# Exploring the dataset
 
-describe(covid)
+dim(covid)
+head(covid, n = 10)
+tail(covid, n = 10)
 
-covid %>% 
+# Inspecting the dataset
+
+vis_dat(covid)
+
+inspect_cat(covid) %>% 
+  show_plot()
+
+inspect_num(covid) %>% 
+  show_plot()
+
+
+```
+
+### Selecting, cleaning, transformation and manipulation of the variables of interest
+
+```{r message=FALSE, warning=FALSE}
+covid_selected <- covid %>% 
+  select(id,
+         reporting_date = 'reporting date', # The initial variable name has to go into quote because it has a whitespace which is unconventional for variable name in R
+         gender, 
+         death,
+         age,
+         country)
+
+
+```
+
+```{r}
+covid_selected %>% 
   select(death) %>% 
   unique()
-```
 
-We have 14 unique entries for death, however, death should have 2 unique values namely:
 
--   0 - Alive
--   1 - Dead
+covid_selected <- covid_selected %>% 
+  mutate(death = as.integer(covid$death != 0)) # This overwrite the initial death column by leaving entries as 0 or converting not zero entries to 1
 
-Hence, the need to clean the column to clear out the inconsistencies
-
-Cleaning the column of interest
-
-```{r}
-names(covid)
-covid <- covid %>% 
-  select(!c(...4,...22,...23,...24,...25,...26)) %>%  #removing columns with all observation missing
-  
-  mutate(death_cleaned = as.integer(covid$death != 0))
-
-```
-
-#### Checking to confirm if the cleaning has been effected
-
-```{r}
-covid %>% 
-  select(death_cleaned) %>% 
+covid_selected %>% # checking to confirm if the changes has been effected
+  select(death) %>% 
   unique()
 
 ```
 
-#### Calculating death rate
-
-```{r Death rate}
-covid %>% 
-  select(death_cleaned) %>% 
-  sum()/ nrow(covid)
+```{r}
+covid_selected <- covid_selected %>% 
+  mutate(reporting_date = mdy(reporting_date)) # This overwrite the initial reporting date by converting the variable class to Date
 
 ```
 
-**Statistical Analysis: Two-sample t-test**
+```{r}
+covid_selected <- covid_selected %>% 
+  mutate(month = month(reporting_date, label = T),
+         month = replace_na(month,"Feb")) # The first mutate chunk create a new column for month and the second replaces na in the month variable with Feb
+
+```
+
+```{r}
+covid_selected <- covid_selected %>% # Creating a column for continent
+  mutate(continent = case_when(
+    country %in% c("USA", "Canada") ~ "North America",
+    country %in% c("France", "Germany", "Italy", "Russia", "UK", "Finland", "Spain",
+                   "Sweden", "Belgium", "Austria", "Croatia", "Switzerland") ~ "Europe",
+    country %in% c("China", "Japan", "Malaysia", "Nepal", "Singapore", "South Korea",
+                   "Taiwan", "Thailand", "Vietnam", "Cambodia", "Sri Lanka", "UAE", 
+                   "Hong Kong", "India", "Phillipines", "Iran", "Israel", "Lebanon",
+                   "Kuwait", "Bahrain", "Afghanistan") ~ "Asia",
+    country %in% c("Australia") ~ "Oceania",
+    country %in% c("Egypt", "Algeria") ~ "Africa",
+    TRUE ~ "Other"))
+```
+
+### Visualizing some of the variables of interest
+
+```{r}
+ggplot(covid_selected, mapping = aes(x = month)) +
+  geom_bar() +
+  labs(title = "Distribution of Cases Reported by Month",
+       subtitle = "Jan 2020 - Feb, 2020",
+       x = "Month",
+       caption = "Analyst: Ayorinde Ayomide David")
+
+```
+
+```{r }
+ggplot(covid_selected,mapping = aes(x = continent, fill = continent)) +
+   geom_bar() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
+  labs(title = "Distribution of COVID-19 Cases by Country",
+       subtitle = "Jan 2020 - Feb 2020",
+       x = "Country",
+       caption = "Analyst: Ayorinde Ayomide David",
+       fill = "Country")
+
+```
+
+### Analyzing fatality by country
+
+```{r}
+covid_selected %>% 
+  group_by(country) %>%  
+  summarise(number_of_death = sum(death == 1))
+  
+```
+
+### Statistical Analysis
+
+**Two-sample t-test**
 
 H~0~: There is no significant difference between the age of those alive and dead ($\mu_1 = \mu_2$)
 
 H~1~: There is a significant difference between the age of those alive and dead ($\mu_1 \ne \mu_2$)
 
 ```{r}
-covid %>% 
-  group_by(death_cleaned) %>% 
+covid_selected %>% 
+  group_by(death) %>% 
   summarise(gender_death_mean = mean(age, na.rm = T))
 
 ```
@@ -99,13 +188,13 @@ We can see that there is a difference of about 20(in years) between the ages of 
 
 Is this really significant?
 
-Let's confirm using **t.test** function
+Let's confirm using **t.test**
 
 ```{r}
-dead <- covid %>% 
-  filter(death_cleaned == 1)
-alive <- covid %>% 
-  filter(death_cleaned == 0)
+dead <- covid_selected %>% 
+  filter(death == 1)
+alive <- covid_selected %>% 
+  filter(death == 0)
 
 t.test(alive$age,
        dead$age,
@@ -122,25 +211,22 @@ t.test(alive$age,
 **Test of Independence**
 
 ```{r}
-covid <- covid %>% 
+covid_selected <- covid_selected %>% 
   drop_na(gender) %>% 
   mutate(gender_cov = factor(gender),
-         death_cov = factor(case_when(death_cleaned == 1 ~ "Alive",
-                               death_cleaned == 0 ~ "Dead")))
+         death_cov = factor(case_when(death == 1 ~ "Dead",
+                               death == 0 ~ "Alive")))
 
-ggplot(covid, mapping = aes(x = gender_cov,
+ggplot(covid_selected, mapping = aes(x = gender_cov,
                             fill = death_cov)) +
   geom_bar() +
   labs(title = "Chi-Square Test of Independence Bar Chart",
        subtitle = "Gender and Death",
        x = "Gender",
-       caption = "Author: Ayorinde Ayomide David",
+       caption = "Analyst: Ayorinde Ayomide David",
        fill = "Life status")
 
 ```
-
-
-
 
 Are the proportions of gender independent of life status?
 
@@ -151,7 +237,7 @@ H~0~: The variables are independent i.e There is no relationship between the var
 H~1~: The variables are not independent i.e There is a relationship between the variables
 
 ```{r}
-covid %>% 
+covid_selected %>% 
   select(gender_cov,
          death_cov) %>% 
   table() %>% 

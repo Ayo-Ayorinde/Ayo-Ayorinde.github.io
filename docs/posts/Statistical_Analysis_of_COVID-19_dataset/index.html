@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Ayorinde Ayomide David">
-<meta name="dcterms.date" content="2025-07-12">
+<meta name="dcterms.date" content="2025-07-27">
 
-<title>Statistical Analysis of COVID-19 dataset – Ayorinde Ayomide David</title>
+<title>Analysis of COVID-19 Dataset – Ayorinde Ayomide David</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -194,7 +194,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Statistical Analysis of COVID-19 dataset</h1>
+      <h1 class="title">Analysis of COVID-19 Dataset</h1>
                                 <div class="quarto-categories">
                 <div class="quarto-category">code</div>
                 <div class="quarto-category">analysis</div>
@@ -216,7 +216,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">July 12, 2025</p>
+        <p class="date">2025-07-27</p>
       </div>
     </div>
     
@@ -235,174 +235,130 @@ window.Quarto = {
 
 
 
-<p>This is a project carried out to test if there is a significance difference between the age of COVID-19 patients who are alive and dead.</p>
-<p>Additionally, this project explores the relationship between the status of life i.e dead or alive and gender.</p>
+<p>In this project, I explored a COVID-19 dataset using R to validate (or challenge) some of the claims and narratives that circulated during the pandemic.</p>
+<p>The analysis covered:</p>
+<p>• Data cleaning and preprocessing</p>
+<p>• Data visualization</p>
+<p>• Statistical techniques and hypothesis testing</p>
 <p>You can find the data for the project <a href="https://www.youtube.com/redirect?event=video_description&amp;redir_token=QUFFLUhqbWlxR2UxWHlxVEVZZ3M4UlI1bi1pOXllTDF2QXxBQ3Jtc0ttMW5waktJUFNvRUo5WE1CVl9kcl95TVF4X1RoTWpoOHc1UVUxSGJYOGlHeS1RLWU3MTVob1JueHhfN2tuQ1JsMDkyem1ZYUNwenVvVUNlNzZjQWY2cHFCdXNBZUx5YWlieXk4dy04ZmZxWXhXMUFENA&amp;q=https%3A%2F%2Fwww.kaggle.com%2Fsudalairajkumar%2Fnovel-corona-virus-2019-dataset%2Fdownload%2FuMF6QnlPB7ScS6BxTw1I%252Fversions%252Fe03zBLHwzT7b8fR01UTk%252Ffiles%252FCOVID19_line_list_data.csv%3FdatasetVersionNumber%3D25&amp;v=D_CNmYkGRUc">here</a></p>
+<section id="importing-the-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="importing-the-dependencies">Importing the dependencies</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span>(<span class="sc">!</span><span class="fu">require</span>(pacman)) <span class="fu">install.packages</span>(<span class="st">"pacman"</span>)  <span class="co"># Installing the package manager</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(tidyverse, <span class="co"># Metapackage</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>               here, <span class="co"># R library for coercing Rmarkdown into reading dataset from a seperate folder</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>               visdat, <span class="co"># R library for graphical inspection of dataset</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>               inspectdf, <span class="co"># R library for the distribution of variables </span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>               gtsummary,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>               ggplot2</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>               )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 <section id="loading-the-covid-19-dataset-into-r" class="level3">
 <h3 class="anchored" data-anchor-id="loading-the-covid-19-dataset-into-r">Loading the COVID-19 dataset into R</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts/Statistical_Analysis_of_COVID-19_dataset/data/COVID19_line_list_data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="fu">here</span>(<span class="st">"posts/Statistical_Analysis_of_COVID-19_dataset/data/COVID19_line_list_data.csv"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="exploring-and-inspecting-the-dataset" class="level3">
 <h3 class="anchored" data-anchor-id="exploring-and-inspecting-the-dataset">Exploring and inspecting the dataset</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">view</span>(covid)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">describe</span>(covid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Exploring the dataset</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(covid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>covid 
-
- 27  Variables      1085  Observations
---------------------------------------------------------------------------------
-id 
-       n  missing distinct     Info     Mean  pMedian      Gmd      .05 
-    1085        0     1085        1      543      543      362     55.2 
-     .10      .25      .50      .75      .90      .95 
-   109.4    272.0    543.0    814.0    976.6   1030.8 
-
-lowest :    1    2    3    4    5, highest: 1081 1082 1083 1084 1085
---------------------------------------------------------------------------------
-case_in_country 
-       n  missing distinct     Info     Mean  pMedian      Gmd      .05 
-     888      197      197        1    48.84       38    54.99     2.00 
-     .10      .25      .50      .75      .90      .95 
-    4.00    11.00    28.00    67.25   110.30   153.65 
-
-lowest :    1    2    3    4    5, highest:  365  443  875  925 1443
---------------------------------------------------------------------------------
-reporting date 
-       n  missing distinct 
-    1084        1       43 
-
-lowest : 02/01/20  02/02/20  02/03/20  02/04/20  02/05/20 
-highest: 2/24/2020 2/25/2020 2/26/2020 2/27/2020 2/28/2020
---------------------------------------------------------------------------------
-summary 
-       n  missing distinct 
-    1080        5      967 
-
-lowest : confirmed COVID-19 pneumonia patient No.11 in Tianjin: female, 55, symptom onset on 01/23/2020, hospitalized on 01/23/2020, confirmed on 01/26/2020                                                                                                 confirmed COVID-19 pneumonia patient No.12 in Tianjin: female, 79, symptom onset on 01/24/2020, hospitalized on 01/24/2020, confirmed on 01/26/2020                                                                                                 confirmed COVID-19 pneumonia patient No.13 in Tianjin: female, 19, symptom onset on 01/19/2020, hospitalized on 01/20/2020, confirmed on 01/26/2020                                                                                                 confirmed COVID-19 pneumonia patient No.14 in Tianjin: male, 71, Wuhan resident, visited Malaysia from 01/19/2020 to 01/25/2020, arrived in Tianjin on 01/25/2020, symptom onset on 01/25/2020, hospitalized on 01/25/2020, confirmed on 01/26/2020 confirmed imported COVID-19 pneumonia patient in Gansu: female, 20, lives in Wuhan, arrived in Gansu on 01/18/2020, symptom onset on 01/19/2020, visit clinic on 01/24/2020, hospitalized on 01/24/2020.                                           
-highest: new recovered imported COVID-19 pneumonia patient in Beijing: female, returned to Beijing from Wuhan on 01/08/2020, symptom onset afterwards, recovered on 01/24/2020.                                                                              new recovered imported COVID-19 pneumonia patient in Beijing: male, returned to Beijing from Wuhan on 01/08/2020, symptom onset afterwards, recovered on 01/25/2020.                                                                                Second confirmed imported COVID-19 pneumonia patient in Guangxi: male, 46, in contact with individuals from Wuhan before symptom onset. symptom onset on 01/20/2020.                                                                                Second confirmed imported COVID-19 pneumonia patient in Liaoning: male, 40, works in Wuhan, visit Fushun, Liaoning on 01/12/2020, symptom onset on 01/14/2020, visit clinic in Fushun Dalian on 01/19/2020.                                         Second confirmed imported COVID-19 pneumonia patient in Sichuan: male, 57, Wuhan resident, visited Sichuan on 01/15/2020, symptom onset on 01/16/2020 and hospitalized.                                                                            
---------------------------------------------------------------------------------
-location 
-       n  missing distinct 
-    1085        0      156 
-
-lowest : Afghanistan      Aichi Prefecture Alappuzha        Algeria          Amiens          
-highest: Yunnan           Zabaikalsky      Zaragoza         Zhejiang         Zhuhai          
---------------------------------------------------------------------------------
-country 
-       n  missing distinct 
-    1085        0       38 
-
-lowest : Afghanistan Algeria     Australia   Austria     Bahrain    
-highest: Thailand    UAE         UK          USA         Vietnam    
---------------------------------------------------------------------------------
-gender 
-       n  missing distinct 
-     902      183        2 
-                        
-Value      female   male
-Frequency     382    520
-Proportion  0.424  0.576
---------------------------------------------------------------------------------
-age 
-       n  missing distinct     Info     Mean  pMedian      Gmd      .05 
-     843      242       85    0.999    49.48       50    20.79     22.0 
-     .10      .25      .50      .75      .90      .95 
-    25.0     35.0     51.0     64.0     75.0     78.9 
-
-lowest : 0.25 0.5  1    2    4   , highest: 86   87   89   91   96  
---------------------------------------------------------------------------------
-symptom_onset 
-       n  missing distinct 
-     563      522       70 
-
-lowest : 01/02/20  01/03/20  01/04/20  01/05/20  01/06/20 
-highest: 2/22/2020 2/23/2020 2/24/2020 2/25/2020 2/26/2020
---------------------------------------------------------------------------------
-If_onset_approximated 
-       n  missing distinct     Info      Sum     Mean 
-     560      525        2    0.123       24  0.04286 
-
---------------------------------------------------------------------------------
-hosp_visit_date 
-       n  missing distinct 
-     507      578       60 
-
-lowest : 01/01/20  01/03/20  01/05/20  01/06/20  01/08/20 
-highest: 2/24/2020 2/25/2020 2/26/2020 2/27/2020 2/28/2020
---------------------------------------------------------------------------------
-exposure_start 
-       n  missing distinct 
-     128      957       39 
-
-lowest : 01/03/20  01/06/20  01/08/20  01/09/20  01/10/20 
-highest: 2/15/2020 2/17/2020 2/19/2020 2/20/2020 2/21/2020
---------------------------------------------------------------------------------
-exposure_end 
-       n  missing distinct 
-     341      744       52 
-
-lowest : 01/02/20  01/03/20  01/04/20  01/05/20  01/06/20 
-highest: 2/21/2020 2/22/2020 2/23/2020 2/24/2020 2/25/2020
---------------------------------------------------------------------------------
-visiting Wuhan 
-       n  missing distinct     Info      Sum     Mean 
-    1085        0        2    0.437      192    0.177 
-
---------------------------------------------------------------------------------
-from Wuhan 
-       n  missing distinct     Info      Sum     Mean 
-    1081        4        2     0.37      156   0.1443 
-
---------------------------------------------------------------------------------
-death 
-       n  missing distinct 
-    1085        0       14 
-
-0 (1022, 0.942), 02/01/20 (1, 0.001), 1 (42, 0.039), 2/13/2020 (1, 0.001),
-2/14/2020 (1, 0.001), 2/19/2020 (2, 0.002), 2/21/2020 (2, 0.002), 2/22/2020 (1,
-0.001), 2/23/2020 (4, 0.004), 2/24/2020 (1, 0.001), 2/25/2020 (2, 0.002),
-2/26/2020 (3, 0.003), 2/27/2020 (2, 0.002), 2/28/2020 (1, 0.001)
---------------------------------------------------------------------------------
-recovered 
-       n  missing distinct 
-    1085        0       32 
-
-lowest : 0         02/02/20  02/04/20  02/05/20  02/06/20 
-highest: 2/24/2020 2/25/2020 2/26/2020 2/27/2020 2/28/2020
---------------------------------------------------------------------------------
-symptom 
-       n  missing distinct 
-     270      815      108 
-
-lowest : chest discomfort                    chills                              cold, fever, pneumonia              cough                               cough with sputum                  
-highest: throat pain, chills                 throat pain, fever                  tired                               vomiting, cough, fever, sore throat vomiting, diarrhea, fever, cough   
---------------------------------------------------------------------------------
-source 
-       n  missing distinct 
-    1085        0       85 
-
-lowest : ABC                 ABC News            Al Arabiya          Aljazeera           Bangkok Post       
-highest: Yonnhap News Agency 人民日报            人民日报官方微博    央视新闻            新浪               
---------------------------------------------------------------------------------
-link 
-       n  missing distinct 
-    1085        0      490 
-
-lowest : http://behdasht.gov.ir/news/%DA%A9%D8%B1%D9%88%D9%86%D8%A7+%D9%88%DB%8C%D8%B1%D9%88%D8%B3/199807/%D8%AF%D8%B1+%D8%B1%D9%88%D8%B2%D9%87%D8%A7%DB%8C+%DA%AF%D8%B0%D8%B4%D8%AA%D9%87+735+%D8%A8%DB%8C%D9%85%D8%A7%D8%B1+%D8%A8%D8%A7+%D8%B9%D9%84%D8%A7%D8%A6%D9%85+%D8%B4%D8%A8%D9%87+%D8%A2%D9%86%D9%81%D9%84%D9%88%D8%A2%D9%86%D8%B2%D8%A7+%D8%AF%D8%B1+%DA%A9%D8%B4%D9%88%D8%B1+%D8%A8%D8%B3%D8%AA%D8%B1%DB%8C+%D8%B4%D8%AF%D9%86%D8%AF+%D8%A8%D8%B1+%D8%A7%D8%B3%D8%A7%D8%B3+%D8%A2%D8%AE%D8%B1%DB%8C%D9%86+%D9%86%D8%AA%D8%A7%DB%8C%D8%AC+%D8%A2%D8%B2%D9%85%D8%A7%DB%8C%D8%B4+%D9%87%D8%A7+%D8%A7%D8%A8%D8%AA%D9%84%D8%A7%DB%8C+13+%D9%85%D9%88%D8%B1%D8%AF+%D8%AF%DB%8C%DA%AF%D8%B1+%D8%A8%D9%87+%DA%A9%D9%88%D9%88%DB%8C%D8%AF19+%D9%82%D8%B7%D8%B9%DB%8C+%D8%A8%D9%87+%D9%86%D8%B8%D8%B1+%D9%85%DB%8C+%D8%B1%D8%B3%D8%AF http://english.alarabiya.net/en/News/gulf/2020/02/25/Number-of-Kuwait-coronavirus-cases-rises-to-eight-KUNA.html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                http://sxwjw.shaanxi.gov.cn/art/2020/1/27/art_9_67483.html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      http://wjw.beijing.gov.cn/xwzx_20031/wnxw/202001/t20200121_1620353.html                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         http://wjw.sz.gov.cn/wzx/202001/t20200120_18987787.htm                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-highest: https://www3.nhk.or.jp/nhkworld/en/news/20200116_23/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            https://www3.nhk.or.jp/nhkworld/en/news/20200124_14/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            https://www3.nhk.or.jp/nhkworld/en/news/20200126_31/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            https://www3.nhk.or.jp/nhkworld/en/news/20200130_02/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            https://www3.nhk.or.jp/nhkworld/en/news/20200131_01/                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
---------------------------------------------------------------------------------
-
-Variables with all observations missing:
-
-[1] ...4  ...22 ...23 ...24 ...25 ...26 ...27</code></pre>
+<pre><code>[1] 1085   27</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>covid <span class="sc">%&gt;%</span> </span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(death) <span class="sc">%&gt;%</span> </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(covid, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 27
+      id case_in_country `reporting date` ...4  summary  location country gender
+   &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;            &lt;lgl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; 
+ 1     1              NA 1/20/2020        NA    First c… Shenzhe… China   male  
+ 2     2              NA 1/20/2020        NA    First c… Shanghai China   female
+ 3     3              NA 1/21/2020        NA    First c… Zhejiang China   male  
+ 4     4              NA 1/21/2020        NA    new con… Tianjin  China   female
+ 5     5              NA 1/21/2020        NA    new con… Tianjin  China   male  
+ 6     6              NA 1/21/2020        NA    First c… Chongqi… China   female
+ 7     7              NA 1/21/2020        NA    First c… Sichuan  China   male  
+ 8     8              NA 1/21/2020        NA    new con… Beijing  China   male  
+ 9     9              NA 1/21/2020        NA    new con… Beijing  China   male  
+10    10              NA 1/21/2020        NA    new con… Beijing  China   male  
+# ℹ 19 more variables: age &lt;dbl&gt;, symptom_onset &lt;chr&gt;,
+#   If_onset_approximated &lt;dbl&gt;, hosp_visit_date &lt;chr&gt;, exposure_start &lt;chr&gt;,
+#   exposure_end &lt;chr&gt;, `visiting Wuhan` &lt;dbl&gt;, `from Wuhan` &lt;dbl&gt;,
+#   death &lt;chr&gt;, recovered &lt;chr&gt;, symptom &lt;chr&gt;, source &lt;chr&gt;, link &lt;chr&gt;,
+#   ...22 &lt;lgl&gt;, ...23 &lt;lgl&gt;, ...24 &lt;lgl&gt;, ...25 &lt;lgl&gt;, ...26 &lt;lgl&gt;,
+#   ...27 &lt;lgl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(covid, <span class="at">n =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 27
+      id case_in_country `reporting date` ...4  summary  location country gender
+   &lt;dbl&gt;           &lt;dbl&gt; &lt;chr&gt;            &lt;lgl&gt; &lt;chr&gt;    &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt; 
+ 1  1076              14 2/25/2020        NA    new COV… Bahrain  Bahrain male  
+ 2  1077              15 2/25/2020        NA    new COV… Bahrain  Bahrain male  
+ 3  1078              16 2/25/2020        NA    new COV… Bahrain  Bahrain female
+ 4  1079              17 2/25/2020        NA    new COV… Bahrain  Bahrain female
+ 5  1080               1 2/25/2020        NA    new COV… Innsbru… Austria &lt;NA&gt;  
+ 6  1081               2 2/25/2020        NA    new COV… Innsbru… Austria &lt;NA&gt;  
+ 7  1082               1 2/24/2020        NA    new COV… Afghani… Afghan… &lt;NA&gt;  
+ 8  1083               1 2/26/2020        NA    new COV… Algeria  Algeria male  
+ 9  1084               1 2/25/2020        NA    new COV… Croatia  Croatia male  
+10  1085               1 2/25/2020        NA    new COV… Bern     Switze… male  
+# ℹ 19 more variables: age &lt;dbl&gt;, symptom_onset &lt;chr&gt;,
+#   If_onset_approximated &lt;dbl&gt;, hosp_visit_date &lt;chr&gt;, exposure_start &lt;chr&gt;,
+#   exposure_end &lt;chr&gt;, `visiting Wuhan` &lt;dbl&gt;, `from Wuhan` &lt;dbl&gt;,
+#   death &lt;chr&gt;, recovered &lt;chr&gt;, symptom &lt;chr&gt;, source &lt;chr&gt;, link &lt;chr&gt;,
+#   ...22 &lt;lgl&gt;, ...23 &lt;lgl&gt;, ...24 &lt;lgl&gt;, ...25 &lt;lgl&gt;, ...26 &lt;lgl&gt;,
+#   ...27 &lt;lgl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Inspecting the dataset</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="fu">vis_dat</span>(covid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect_cat</span>(covid) <span class="sc">%&gt;%</span> </span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">inspect_num</span>(covid) <span class="sc">%&gt;%</span> </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_plot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="selecting-cleaning-transformation-and-manipulation-of-the-variables-of-interest" class="level3">
+<h3 class="anchored" data-anchor-id="selecting-cleaning-transformation-and-manipulation-of-the-variables-of-interest">Selecting, cleaning, transformation and manipulation of the variables of interest</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid <span class="sc">%&gt;%</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(id,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">reporting_date =</span> <span class="st">'reporting date'</span>, <span class="co"># The initial variable name has to go into quote because it has a whitespace which is unconventional for variable name in R</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>         gender, </span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>         death,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>         age,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>         country)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(death) <span class="sc">%&gt;%</span> </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 14 × 1
    death    
@@ -422,85 +378,133 @@ Variables with all observations missing:
 13 2/19/2020
 14 2/21/2020</code></pre>
 </div>
-</div>
-<p>We have 14 unique entries for death, however, death should have 2 unique values namely:</p>
-<ul>
-<li>0 - Alive</li>
-<li>1 - Dead</li>
-</ul>
-<p>Hence, the need to clean the column to clear out the inconsistencies</p>
-<p>Cleaning the column of interest</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(covid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code> [1] "id"                    "case_in_country"       "reporting date"       
- [4] "...4"                  "summary"               "location"             
- [7] "country"               "gender"                "age"                  
-[10] "symptom_onset"         "If_onset_approximated" "hosp_visit_date"      
-[13] "exposure_start"        "exposure_end"          "visiting Wuhan"       
-[16] "from Wuhan"            "death"                 "recovered"            
-[19] "symptom"               "source"                "link"                 
-[22] "...22"                 "...23"                 "...24"                
-[25] "...25"                 "...26"                 "...27"                </code></pre>
-</div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> covid <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">!</span><span class="fu">c</span>(...<span class="dv">4</span>,...<span class="dv">22</span>,...<span class="dv">23</span>,...<span class="dv">24</span>,...<span class="dv">25</span>,...<span class="dv">26</span>)) <span class="sc">%&gt;%</span>  <span class="co">#removing columns with all observation missing</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">death_cleaned =</span> <span class="fu">as.integer</span>(covid<span class="sc">$</span>death <span class="sc">!=</span> <span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<section id="checking-to-confirm-if-the-cleaning-has-been-effected" class="level4">
-<h4 class="anchored" data-anchor-id="checking-to-confirm-if-the-cleaning-has-been-effected">Checking to confirm if the cleaning has been effected</h4>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>covid <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(death_cleaned) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">death =</span> <span class="fu">as.integer</span>(covid<span class="sc">$</span>death <span class="sc">!=</span> <span class="dv">0</span>)) <span class="co"># This overwrite the initial death column by leaving entries as 0 or converting not zero entries to 1</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="sc">%&gt;%</span> <span class="co"># checking to confirm if the changes has been effected</span></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(death) <span class="sc">%&gt;%</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 1
-  death_cleaned
-          &lt;int&gt;
-1             0
-2             1</code></pre>
+  death
+  &lt;int&gt;
+1     0
+2     1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">reporting_date =</span> <span class="fu">mdy</span>(reporting_date)) <span class="co"># This overwrite the initial reporting date by converting the variable class to Date</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">month =</span> <span class="fu">month</span>(reporting_date, <span class="at">label =</span> T),</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">month =</span> <span class="fu">replace_na</span>(month,<span class="st">"Feb"</span>)) <span class="co"># The first mutate chunk create a new column for month and the second replaces na in the month variable with Feb</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> <span class="co"># Creating a column for continent</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">continent =</span> <span class="fu">case_when</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"USA"</span>, <span class="st">"Canada"</span>) <span class="sc">~</span> <span class="st">"North America"</span>,</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"France"</span>, <span class="st">"Germany"</span>, <span class="st">"Italy"</span>, <span class="st">"Russia"</span>, <span class="st">"UK"</span>, <span class="st">"Finland"</span>, <span class="st">"Spain"</span>,</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Sweden"</span>, <span class="st">"Belgium"</span>, <span class="st">"Austria"</span>, <span class="st">"Croatia"</span>, <span class="st">"Switzerland"</span>) <span class="sc">~</span> <span class="st">"Europe"</span>,</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"China"</span>, <span class="st">"Japan"</span>, <span class="st">"Malaysia"</span>, <span class="st">"Nepal"</span>, <span class="st">"Singapore"</span>, <span class="st">"South Korea"</span>,</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Taiwan"</span>, <span class="st">"Thailand"</span>, <span class="st">"Vietnam"</span>, <span class="st">"Cambodia"</span>, <span class="st">"Sri Lanka"</span>, <span class="st">"UAE"</span>, </span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Hong Kong"</span>, <span class="st">"India"</span>, <span class="st">"Phillipines"</span>, <span class="st">"Iran"</span>, <span class="st">"Israel"</span>, <span class="st">"Lebanon"</span>,</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"Kuwait"</span>, <span class="st">"Bahrain"</span>, <span class="st">"Afghanistan"</span>) <span class="sc">~</span> <span class="st">"Asia"</span>,</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Australia"</span>) <span class="sc">~</span> <span class="st">"Oceania"</span>,</span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>    country <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"Egypt"</span>, <span class="st">"Algeria"</span>) <span class="sc">~</span> <span class="st">"Africa"</span>,</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>    <span class="cn">TRUE</span> <span class="sc">~</span> <span class="st">"Other"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-some-of-the-variables-of-interest" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-some-of-the-variables-of-interest">Visualizing some of the variables of interest</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid_selected, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> month)) <span class="sc">+</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of Cases Reported by Month"</span>,</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Jan 2020 - Feb, 2020"</span>,</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Month"</span>,</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Analyst: Ayorinde Ayomide David"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid_selected,<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> continent, <span class="at">fill =</span> continent)) <span class="sc">+</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>)) <span class="sc">+</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Distribution of COVID-19 Cases by Country"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Jan 2020 - Feb 2020"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Country"</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Analyst: Ayorinde Ayomide David"</span>,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Country"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 </section>
-<section id="calculating-death-rate" class="level4">
-<h4 class="anchored" data-anchor-id="calculating-death-rate">Calculating death rate</h4>
+<section id="analyzing-fatality-by-country" class="level3">
+<h3 class="anchored" data-anchor-id="analyzing-fatality-by-country">Analyzing fatality by country</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>covid <span class="sc">%&gt;%</span> </span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(death_cleaned) <span class="sc">%&gt;%</span> </span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>()<span class="sc">/</span> <span class="fu">nrow</span>(covid)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(country) <span class="sc">%&gt;%</span>  </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">number_of_death =</span> <span class="fu">sum</span>(death <span class="sc">==</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.05806452</code></pre>
+<pre><code># A tibble: 38 × 2
+   country     number_of_death
+   &lt;chr&gt;                 &lt;int&gt;
+ 1 Afghanistan               0
+ 2 Algeria                   0
+ 3 Australia                 0
+ 4 Austria                   0
+ 5 Bahrain                   0
+ 6 Belgium                   0
+ 7 Cambodia                  0
+ 8 Canada                    0
+ 9 China                    39
+10 Croatia                   0
+# ℹ 28 more rows</code></pre>
 </div>
 </div>
-<p><strong>Statistical Analysis: Two-sample t-test</strong></p>
+</section>
+<section id="statistical-analysis" class="level3">
+<h3 class="anchored" data-anchor-id="statistical-analysis">Statistical Analysis</h3>
+<p><strong>Two-sample t-test</strong></p>
 <p>H<sub>0</sub>: There is no significant difference between the age of those alive and dead (<span class="math inline">\(\mu_1 = \mu_2\)</span>)</p>
 <p>H<sub>1</sub>: There is a significant difference between the age of those alive and dead (<span class="math inline">\(\mu_1 \ne \mu_2\)</span>)</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>covid <span class="sc">%&gt;%</span> </span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(death_cleaned) <span class="sc">%&gt;%</span> </span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gender_death_mean =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(death) <span class="sc">%&gt;%</span> </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">gender_death_mean =</span> <span class="fu">mean</span>(age, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 × 2
-  death_cleaned gender_death_mean
-          &lt;int&gt;             &lt;dbl&gt;
-1             0              48.1
-2             1              68.6</code></pre>
+  death gender_death_mean
+  &lt;int&gt;             &lt;dbl&gt;
+1     0              48.1
+2     1              68.6</code></pre>
 </div>
 </div>
 <p>We can see that there is a difference of about 20(in years) between the ages of those that are dead and alive. Now, the question:</p>
 <p>Is this really significant?</p>
-<p>Let’s confirm using <strong>t.test</strong> function</p>
+<p>Let’s confirm using <strong>t.test</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dead <span class="ot">&lt;-</span> covid <span class="sc">%&gt;%</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(death_cleaned <span class="sc">==</span> <span class="dv">1</span>)</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>alive <span class="ot">&lt;-</span> covid <span class="sc">%&gt;%</span> </span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(death_cleaned <span class="sc">==</span> <span class="dv">0</span>)</span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(alive<span class="sc">$</span>age,</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>       dead<span class="sc">$</span>age,</span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">conf.level =</span> <span class="fl">0.95</span>,</span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>dead <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(death <span class="sc">==</span> <span class="dv">1</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>alive <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(death <span class="sc">==</span> <span class="dv">0</span>)</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="fu">t.test</span>(alive<span class="sc">$</span>age,</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>       dead<span class="sc">$</span>age,</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">conf.level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>       <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Welch Two Sample t-test
@@ -519,24 +523,24 @@ mean of x mean of y
 <p><strong>Conclusion</strong>: Since the p-value is &lt; 0.05, we reject null hypothesis and conclude that there is a significant difference between the age of those that are dead and those that are alive. In order words, older people are more likely/prone to death if tested positive for COVID-19</p>
 <p><strong>Test of Independence</strong></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>covid <span class="ot">&lt;-</span> covid <span class="sc">%&gt;%</span> </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(gender) <span class="sc">%&gt;%</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender_cov =</span> <span class="fu">factor</span>(gender),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">death_cov =</span> <span class="fu">factor</span>(<span class="fu">case_when</span>(death_cleaned <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Alive"</span>,</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>                               death_cleaned <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">"Dead"</span>)))</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gender_cov,</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">fill =</span> death_cov)) <span class="sc">+</span></span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Chi-Square Test of Independence Bar Chart"</span>,</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gender and Death"</span>,</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Author: Ayorinde Ayomide David"</span>,</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Life status"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="ot">&lt;-</span> covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drop_na</span>(gender) <span class="sc">%&gt;%</span> </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gender_cov =</span> <span class="fu">factor</span>(gender),</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">death_cov =</span> <span class="fu">factor</span>(<span class="fu">case_when</span>(death <span class="sc">==</span> <span class="dv">1</span> <span class="sc">~</span> <span class="st">"Dead"</span>,</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>                               death <span class="sc">==</span> <span class="dv">0</span> <span class="sc">~</span> <span class="st">"Alive"</span>)))</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(covid_selected, <span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> gender_cov,</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>                            <span class="at">fill =</span> death_cov)) <span class="sc">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>() <span class="sc">+</span></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Chi-Square Test of Independence Bar Chart"</span>,</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"Gender and Death"</span>,</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Gender"</span>,</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Analyst: Ayorinde Ayomide David"</span>,</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>       <span class="at">fill =</span> <span class="st">"Life status"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="index_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="index_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -546,11 +550,11 @@ mean of x mean of y
 <p>H<sub>0</sub>: The variables are independent i.e There is no relationship between the variables</p>
 <p>H<sub>1</sub>: The variables are not independent i.e There is a relationship between the variables</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>covid <span class="sc">%&gt;%</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gender_cov,</span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         death_cov) <span class="sc">%&gt;%</span> </span>
-<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chisq.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>covid_selected <span class="sc">%&gt;%</span> </span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(gender_cov,</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>         death_cov) <span class="sc">%&gt;%</span> </span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">table</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chisq.test</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Pearson's Chi-squared test with Yates' continuity correction
@@ -563,7 +567,6 @@ X-squared = 7.6428, df = 1, p-value = 0.0057</code></pre>
 <p><strong>Conclusion</strong>: Since the p-value is &lt; 0.05, we reject null hypothesis and conclude that there is a relationship between the death and gender variable</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
