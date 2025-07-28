@@ -1,0 +1,166 @@
+---
+title: "Analysis of NFL Dataset"
+author: "Ayorinde Ayomide David"
+date: "2025-07-28"
+categories: [code, analysis, r]
+image: nfl.jpg
+---
+
+---
+title: "Analysis of NFL Dataset"
+author: "Ayorinde Ayomide David"
+date: "`r Sys.Date()`"
+output: pdf_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This project explores the data from the 2023/24 NFL season to provide valuable insight about the happenings of the season
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+
+```
+
+### Loading dependencies
+```{r}
+if(!require(pacman)) install.packages("pacman") # installing the package manager
+
+pacman::p_load(tidyverse, #R meta-package
+               nflreadr, # R library for NFL data
+               gt, # R library for interactive tables
+               ggimage, # R library  
+               gtExtras,
+               future,
+               visdat,
+               inspectdf, # R library for visual EDA
+               gtsummary) # R library for descriptive EDA
+
+```
+
+### Telling R to run future tasks in parallel i.e each on its own background session in R(seperate R process)
+```{r}
+plan("multisession")
+options(timeout = 300) # Timeout of 60secs was reached without the dataset being loaded. Hence, the need to manually increase the timeout limit to  5 mins
+```
+
+### Loading NFL data for 2023/24 season
+```{r}
+pbp <- load_pbp(2023)
+plan("sequential")
+```
+
+### Exploring, selecting and inspecting the variables of interest 
+```{r}
+#Exploring the whole dataset
+
+dim(pbp)
+head(pbp)
+
+# Selecting the variable of interest
+
+pbp_selected <- pbp %>% 
+  select(game_id, week, home_team, away_team,season_type,game_date,result,home_score,away_score)
+
+#Inspecting the selected variables for missing values
+
+pbp_selected %>% 
+  filter(is.na(week)) 
+
+pbp_selected %>% 
+  filter(is.na(home_team))
+
+pbp_selected %>% 
+  filter(is.na(away_team))
+
+pbp_selected %>% 
+  filter(is.na(season_type))
+
+pbp_selected %>% 
+  filter(is.na(game_date))
+
+pbp_selected %>% 
+  filter(is.na(result))
+
+pbp_selected %>% 
+  filter(is.na(home_score))
+
+pbp_selected %>% 
+  filter(is.na(away_score))
+
+# Inspecting the categorical variables from pbp_selected for inconsistency
+
+pbp_selected %>% 
+  select(home_team) %>% 
+  unique()
+
+pbp_selected %>% 
+  select(away_team) %>% 
+  unique()
+
+pbp_selected %>% 
+  select(season_type) %>% 
+  unique()
+
+# Dropping duplicate entries
+pbp_selected <- pbp_selected %>% 
+  unique()
+
+```
+
+### Analyzing the dataset to identify the team who won the SUPER BOWL
+
+```{r}
+pbp_selected_post <- pbp_selected %>% # Filtering the dataset to include only SUPER BOWL matches
+  filter(season_type == "POST")
+
+
+pbp_post_winners <- pbp_selected_post %>% # Creating a new column for the winning teams across the matches played
+  mutate(home_winner = result >0, 
+         winning_team = case_when(home_winner == T ~ home_team,
+                                  home_winner == F ~ away_team))
+
+pbp_post_winners %>%  # filtering by week and selecting the winning team column to identify 2023/24 season Super Bowl winner
+  filter(week == 22) %>% 
+  select(winning_team)
+```
+
+### Calculating the point differential for the 2023/24 season ----
+```{r}
+pbp_selected_diff <- pbp_selected %>% 
+  filter(season_type == "REG") %>% 
+  group_by(home_team) %>% 
+  mutate(home_pf = sum(home_score),
+         home_pa = sum(away_score)) %>% 
+  ungroup() %>% 
+  group_by(away_team) %>% 
+  mutate(away_pf = sum(away_score),
+         away_pa = sum(home_score)) %>% 
+  ungroup()
+
+pbp_selected_diff1 <- pbp_selected_diff %>% 
+  reframe(team = home_team,
+          pf = home_pf,
+          pa =home_pa) %>% 
+  unique()
+
+pbp_selected_diff2 <- pbp_selected_diff %>% 
+  reframe(team = away_team,
+          pf = away_pf,
+          pa = away_pa) %>% 
+  unique()
+
+pbp_diff_comb <- rbind(pbp_selected_diff1,pbp_selected_diff2) %>% 
+  group_by(team) %>% 
+  mutate(pf = sum(pf), pa = sum(pa), pt_diff = pf - pa) %>% 
+  unique()
+
+pbp_diff_comb
+```
+
+  
+
