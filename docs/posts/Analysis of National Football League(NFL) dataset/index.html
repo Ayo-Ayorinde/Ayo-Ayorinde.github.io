@@ -414,8 +414,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 </section>
-<section id="calculating-the-point-differential-for-the-202324-season--" class="level3">
-<h3 class="anchored" data-anchor-id="calculating-the-point-differential-for-the-202324-season--">Calculating the point differential for the 2023/24 season —-</h3>
+<section id="calculating-the-point-differential-for-the-202324-season" class="level3">
+<h3 class="anchored" data-anchor-id="calculating-the-point-differential-for-the-202324-season">Calculating the point differential for the 2023/24 season</h3>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>pbp_selected_diff <span class="ot">&lt;-</span> pbp_selected <span class="sc">%&gt;%</span> </span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(season_type <span class="sc">==</span> <span class="st">"REG"</span>) <span class="sc">%&gt;%</span> </span>
@@ -462,6 +462,757 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  9 IND     396   415     -19
 10 SEA     364   402     -38
 # ℹ 22 more rows</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a csv file of point differential</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(pbp_diff_comb, <span class="st">"poinit_diffential.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="visualizing-the-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="visualizing-the-dataset">Visualizing the dataset</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"poinit_diffential.csv"</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>teams_colors_logos <span class="ot">&lt;-</span> <span class="fu">load_teams</span>()</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>teams_colors_logos_logo <span class="ot">&lt;-</span> teams_colors_logos <span class="sc">%&gt;%</span> </span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team_abbr,team_name,team_logo_espn,team_wordmark,team_color,team_color2)</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="ot">&lt;-</span> pbp_ptdiff_comb <span class="sc">%&gt;%</span> </span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(teams_colors_logos_logo, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"team"</span><span class="ot">=</span><span class="st">"team_abbr"</span>))</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">300</span>)</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(team_name, pf),<span class="at">y =</span> pf)) <span class="sc">+</span></span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">fill =</span> team_color, <span class="at">colour =</span> team_color2), <span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb36-14"><a href="#cb36-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_identity</span>(<span class="at">aesthetics =</span> <span class="fu">c</span>(<span class="st">"fill"</span>,<span class="st">"color"</span>)) <span class="sc">+</span></span>
+<span id="cb36-15"><a href="#cb36-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">y =</span> pf <span class="sc">+</span> <span class="dv">11</span>, <span class="at">image =</span> team_logo_espn), </span>
+<span id="cb36-16"><a href="#cb36-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">16</span><span class="sc">/</span><span class="dv">9</span>, <span class="at">size =</span> <span class="fl">0.025</span>) <span class="sc">+</span></span>
+<span id="cb36-17"><a href="#cb36-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Team"</span>,</span>
+<span id="cb36-18"><a href="#cb36-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"PF"</span>,</span>
+<span id="cb36-19"><a href="#cb36-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Bar chart of Total Points Scored by Each Team"</span>) <span class="sc">+</span></span>
+<span id="cb36-20"><a href="#cb36-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>,</span>
+<span id="cb36-21"><a href="#cb36-21" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">face =</span> <span class="st">"bold"</span>,</span>
+<span id="cb36-22"><a href="#cb36-22" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb36-23"><a href="#cb36-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
+<span id="cb36-24"><a href="#cb36-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/g-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pf,</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> pa)) <span class="sc">+</span></span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb37-13"><a href="#cb37-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb37-14"><a href="#cb37-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image =</span> team_logo_espn),</span>
+<span id="cb37-15"><a href="#cb37-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">16</span><span class="sc">/</span><span class="dv">19</span>,</span>
+<span id="cb37-16"><a href="#cb37-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.04</span>) <span class="sc">+</span></span>
+<span id="cb37-17"><a href="#cb37-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Point For"</span>,</span>
+<span id="cb37-18"><a href="#cb37-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Point Against"</span>,</span>
+<span id="cb37-19"><a href="#cb37-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"NFL Points For and Against"</span>,</span>
+<span id="cb37-20"><a href="#cb37-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"2023 Season W1-W18 | Data via NFLReadr"</span>,</span>
+<span id="cb37-21"><a href="#cb37-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span> <span class="st">"Ayorinde Ayomide David"</span>) <span class="sc">+</span></span>
+<span id="cb37-22"><a href="#cb37-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, </span>
+<span id="cb37-23"><a href="#cb37-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">face =</span> <span class="st">"bold"</span>,</span>
+<span id="cb37-24"><a href="#cb37-24" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb37-25"><a href="#cb37-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb37-26"><a href="#cb37-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/g-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(team_wordmark,pf,pa,pt_diff) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>pt_diff) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_img_rows</span>(team_wordmark) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">team_wordmark =</span> <span class="st">"Team"</span>,</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">pf =</span> <span class="st">"PF"</span>,</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">pa =</span> <span class="st">"PA"</span>,</span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">pt_diff =</span> <span class="st">"PD"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_align</span>(<span class="at">align =</span> <span class="st">"center"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_theme_espn</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Team Point Differentials 2023/24 Season"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> <span class="fu">c</span>(pt_diff),</span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">target_columns =</span> <span class="fu">c</span>(pt_diff),</span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">colors =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"tomato3"</span>, <span class="st">"green4"</span>),</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">domain =</span> <span class="cn">NULL</span></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true" tabindex="-1"></a>             ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="aeklnivhtv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+#aeklnivhtv table {
+  font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#aeklnivhtv thead, #aeklnivhtv tbody, #aeklnivhtv tfoot, #aeklnivhtv tr, #aeklnivhtv td, #aeklnivhtv th {
+  border-style: none;
+}
+
+#aeklnivhtv p {
+  margin: 0;
+  padding: 0;
+}
+
+#aeklnivhtv .gt_table {
+  display: table;
+  border-collapse: collapse;
+  line-height: normal;
+  margin-left: auto;
+  margin-right: auto;
+  color: #333333;
+  font-size: 16px;
+  font-weight: normal;
+  font-style: normal;
+  background-color: #FFFFFF;
+  width: auto;
+  border-top-style: solid;
+  border-top-width: 3px;
+  border-top-color: #FFFFFF;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #A8A8A8;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_caption {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+#aeklnivhtv .gt_title {
+  color: #333333;
+  font-size: 24px;
+  font-weight: initial;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+
+#aeklnivhtv .gt_subtitle {
+  color: #333333;
+  font-size: 85%;
+  font-weight: initial;
+  padding-top: 3px;
+  padding-bottom: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+#aeklnivhtv .gt_heading {
+  background-color: #FFFFFF;
+  text-align: left;
+  border-bottom-color: #FFFFFF;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_bottom_border {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_col_headings {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_col_heading {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 6px;
+  padding-left: 5px;
+  padding-right: 5px;
+  overflow-x: hidden;
+}
+
+#aeklnivhtv .gt_column_spanner_outer {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+
+#aeklnivhtv .gt_column_spanner_outer:first-child {
+  padding-left: 0;
+}
+
+#aeklnivhtv .gt_column_spanner_outer:last-child {
+  padding-right: 0;
+}
+
+#aeklnivhtv .gt_column_spanner {
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: bottom;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  overflow-x: hidden;
+  display: inline-block;
+  width: 100%;
+}
+
+#aeklnivhtv .gt_spanner_row {
+  border-bottom-style: hidden;
+}
+
+#aeklnivhtv .gt_group_heading {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  text-align: left;
+}
+
+#aeklnivhtv .gt_empty_group_heading {
+  padding: 0.5px;
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  vertical-align: middle;
+}
+
+#aeklnivhtv .gt_from_md > :first-child {
+  margin-top: 0;
+}
+
+#aeklnivhtv .gt_from_md > :last-child {
+  margin-bottom: 0;
+}
+
+#aeklnivhtv .gt_row {
+  padding-top: 7px;
+  padding-bottom: 7px;
+  padding-left: 5px;
+  padding-right: 5px;
+  margin: 10px;
+  border-top-style: solid;
+  border-top-width: 1px;
+  border-top-color: #F6F7F7;
+  border-left-style: none;
+  border-left-width: 1px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 1px;
+  border-right-color: #D3D3D3;
+  vertical-align: middle;
+  overflow-x: hidden;
+}
+
+#aeklnivhtv .gt_stub {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 80%;
+  font-weight: bolder;
+  text-transform: uppercase;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#aeklnivhtv .gt_stub_row_group {
+  color: #333333;
+  background-color: #FFFFFF;
+  font-size: 100%;
+  font-weight: initial;
+  text-transform: inherit;
+  border-right-style: solid;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+  padding-left: 5px;
+  padding-right: 5px;
+  vertical-align: top;
+}
+
+#aeklnivhtv .gt_row_group_first td {
+  border-top-width: 2px;
+}
+
+#aeklnivhtv .gt_row_group_first th {
+  border-top-width: 2px;
+}
+
+#aeklnivhtv .gt_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#aeklnivhtv .gt_first_summary_row {
+  border-top-style: solid;
+  border-top-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_first_summary_row.thick {
+  border-top-width: 2px;
+}
+
+#aeklnivhtv .gt_last_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_grand_summary_row {
+  color: #333333;
+  background-color: #FFFFFF;
+  text-transform: inherit;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#aeklnivhtv .gt_first_grand_summary_row {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-top-style: double;
+  border-top-width: 6px;
+  border-top-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_last_grand_summary_row_top {
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom-style: double;
+  border-bottom-width: 6px;
+  border-bottom-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_striped {
+  background-color: #FAFAFA;
+}
+
+#aeklnivhtv .gt_table_body {
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: #D3D3D3;
+  border-bottom-style: solid;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_footnotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_footnote {
+  margin: 0px;
+  font-size: 90%;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#aeklnivhtv .gt_sourcenotes {
+  color: #333333;
+  background-color: #FFFFFF;
+  border-bottom-style: none;
+  border-bottom-width: 2px;
+  border-bottom-color: #D3D3D3;
+  border-left-style: none;
+  border-left-width: 2px;
+  border-left-color: #D3D3D3;
+  border-right-style: none;
+  border-right-width: 2px;
+  border-right-color: #D3D3D3;
+}
+
+#aeklnivhtv .gt_sourcenote {
+  font-size: 12px;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+#aeklnivhtv .gt_left {
+  text-align: left;
+}
+
+#aeklnivhtv .gt_center {
+  text-align: center;
+}
+
+#aeklnivhtv .gt_right {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+#aeklnivhtv .gt_font_normal {
+  font-weight: normal;
+}
+
+#aeklnivhtv .gt_font_bold {
+  font-weight: bold;
+}
+
+#aeklnivhtv .gt_font_italic {
+  font-style: italic;
+}
+
+#aeklnivhtv .gt_super {
+  font-size: 65%;
+}
+
+#aeklnivhtv .gt_footnote_marks {
+  font-size: 75%;
+  vertical-align: 0.4em;
+  position: initial;
+}
+
+#aeklnivhtv .gt_asterisk {
+  font-size: 100%;
+  vertical-align: 0;
+}
+
+#aeklnivhtv .gt_indent_1 {
+  text-indent: 5px;
+}
+
+#aeklnivhtv .gt_indent_2 {
+  text-indent: 10px;
+}
+
+#aeklnivhtv .gt_indent_3 {
+  text-indent: 15px;
+}
+
+#aeklnivhtv .gt_indent_4 {
+  text-indent: 20px;
+}
+
+#aeklnivhtv .gt_indent_5 {
+  text-indent: 25px;
+}
+
+#aeklnivhtv .katex-display {
+  display: inline-flex !important;
+  margin-bottom: 0.75em !important;
+}
+
+#aeklnivhtv div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+  height: 0px !important;
+}
+</style>
+
+<table class="gt_table caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
+<thead>
+<tr class="gt_heading header">
+<th colspan="4" class="gt_heading gt_title gt_font_normal gt_bottom_border">Team Point Differentials 2023/24 Season</th>
+</tr>
+<tr class="gt_col_headings even">
+<th id="team_wordmark" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">Team</th>
+<th id="pf" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">PF</th>
+<th id="pa" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">PA</th>
+<th id="pt_diff" class="gt_col_heading gt_columns_bottom_border gt_center" data-quarto-table-cell-role="th" scope="col">PD</th>
+</tr>
+</thead>
+<tbody class="gt_table_body">
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/BAL.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">483</td>
+<td class="gt_row gt_center" headers="pa">280</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #008B00; color: #FFFFFF">203</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/DAL.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">509</td>
+<td class="gt_row gt_center gt_striped" headers="pa">315</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #188A02; color: #FFFFFF">194</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/SF.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">491</td>
+<td class="gt_row gt_center" headers="pa">298</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #1A8A03; color: #FFFFFF">193</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/BUF.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">451</td>
+<td class="gt_row gt_center gt_striped" headers="pa">311</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #4A8610; color: #FFFFFF">140</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/MIA.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">496</td>
+<td class="gt_row gt_center" headers="pa">391</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #5E8316; color: #FFFFFF">105</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/KC.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">371</td>
+<td class="gt_row gt_center gt_striped" headers="pa">294</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #6B801B; color: #FFFFFF">77</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/NO.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">402</td>
+<td class="gt_row gt_center" headers="pa">327</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #6C801B; color: #FFFFFF">75</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/DET.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">461</td>
+<td class="gt_row gt_center gt_striped" headers="pa">395</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #707F1C; color: #FFFFFF">66</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/CLE.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">396</td>
+<td class="gt_row gt_center" headers="pa">362</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #7E7B21; color: #FFFFFF">34</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/GB.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">383</td>
+<td class="gt_row gt_center gt_striped" headers="pa">350</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #7E7B21; color: #FFFFFF">33</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/LA.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">404</td>
+<td class="gt_row gt_center" headers="pa">377</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #807A22; color: #FFFFFF">27</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/HOU.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">377</td>
+<td class="gt_row gt_center gt_striped" headers="pa">353</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #827A22; color: #FFFFFF">24</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/TB.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">348</td>
+<td class="gt_row gt_center" headers="pa">325</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #827922; color: #FFFFFF">23</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/JAX.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">377</td>
+<td class="gt_row gt_center gt_striped" headers="pa">371</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #897724; color: #FFFFFF">6</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/PHI.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">433</td>
+<td class="gt_row gt_center" headers="pa">428</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #897724; color: #FFFFFF">5</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/LV.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">332</td>
+<td class="gt_row gt_center gt_striped" headers="pa">331</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #8B7625; color: #FFFFFF">1</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/MIN.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">344</td>
+<td class="gt_row gt_center" headers="pa">362</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #927427; color: #FFFFFF">-18</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/CIN.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">366</td>
+<td class="gt_row gt_center gt_striped" headers="pa">384</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #927427; color: #FFFFFF">-18</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/CHI.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">360</td>
+<td class="gt_row gt_center" headers="pa">379</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #927427; color: #FFFFFF">-19</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/IND.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">396</td>
+<td class="gt_row gt_center gt_striped" headers="pa">415</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #927427; color: #FFFFFF">-19</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/PIT.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">304</td>
+<td class="gt_row gt_center" headers="pa">324</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #937327; color: #FFFFFF">-20</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/SEA.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">364</td>
+<td class="gt_row gt_center gt_striped" headers="pa">402</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #997129; color: #FFFFFF">-38</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/ATL.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">321</td>
+<td class="gt_row gt_center" headers="pa">373</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #9E6E2B; color: #FFFFFF">-52</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/LAC.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">346</td>
+<td class="gt_row gt_center gt_striped" headers="pa">398</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #9E6E2B; color: #FFFFFF">-52</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/DEN.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">357</td>
+<td class="gt_row gt_center" headers="pa">413</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #A06E2B; color: #FFFFFF">-56</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/TEN.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">305</td>
+<td class="gt_row gt_center gt_striped" headers="pa">367</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #A26D2C; color: #FFFFFF">-62</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/NYJ.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">268</td>
+<td class="gt_row gt_center" headers="pa">355</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #AB682F; color: #FFFFFF">-87</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/ARI.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">330</td>
+<td class="gt_row gt_center gt_striped" headers="pa">455</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #B86033; color: #FFFFFF">-125</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/NE.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">236</td>
+<td class="gt_row gt_center" headers="pa">366</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #B95F33; color: #FFFFFF">-130</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/NYG.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">266</td>
+<td class="gt_row gt_center gt_striped" headers="pa">407</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #BD5C34; color: #FFFFFF">-141</td>
+</tr>
+<tr class="odd">
+<td class="gt_row gt_center" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/CAR.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center" headers="pf">236</td>
+<td class="gt_row gt_center" headers="pa">416</td>
+<td class="gt_row gt_center" headers="pt_diff" style="background-color: #CA5238; color: #FFFFFF">-180</td>
+</tr>
+<tr class="even">
+<td class="gt_row gt_center gt_striped" headers="team_wordmark"><img src="https://github.com/nflverse/nflverse-pbp/raw/master/wordmarks/WAS.png" class="img-fluid" style="height:30px;"></td>
+<td class="gt_row gt_center gt_striped" headers="pf">329</td>
+<td class="gt_row gt_center gt_striped" headers="pa">518</td>
+<td class="gt_row gt_center gt_striped" headers="pt_diff" style="background-color: #CD4F39; color: #FFFFFF">-189</td>
+</tr>
+</tbody>
+</table>
+
+</div>
 </div>
 </div>
 

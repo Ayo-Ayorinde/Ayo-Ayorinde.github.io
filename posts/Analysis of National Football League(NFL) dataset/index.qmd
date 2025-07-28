@@ -27,7 +27,7 @@ knitr::opts_chunk$set(
 ```
 
 ### Loading dependencies
-```{r}
+```{r a}
 if(!require(pacman)) install.packages("pacman") # installing the package manager
 
 pacman::p_load(tidyverse, #R meta-package
@@ -43,19 +43,19 @@ pacman::p_load(tidyverse, #R meta-package
 ```
 
 ### Telling R to run future tasks in parallel i.e each on its own background session in R(seperate R process)
-```{r}
+```{r b}
 plan("multisession")
 options(timeout = 300) # Timeout of 60secs was reached without the dataset being loaded. Hence, the need to manually increase the timeout limit to  5 mins
 ```
 
 ### Loading NFL data for 2023/24 season
-```{r}
+```{r c}
 pbp <- load_pbp(2023)
 plan("sequential")
 ```
 
 ### Exploring, selecting and inspecting the variables of interest 
-```{r}
+```{r d}
 #Exploring the whole dataset
 
 dim(pbp)
@@ -114,7 +114,7 @@ pbp_selected <- pbp_selected %>%
 
 ### Analyzing the dataset to identify the team who won the SUPER BOWL
 
-```{r}
+```{r e}
 pbp_selected_post <- pbp_selected %>% # Filtering the dataset to include only SUPER BOWL matches
   filter(season_type == "POST")
 
@@ -129,8 +129,8 @@ pbp_post_winners %>%  # filtering by week and selecting the winning team column 
   select(winning_team)
 ```
 
-### Calculating the point differential for the 2023/24 season ----
-```{r}
+### Calculating the point differential for the 2023/24 season
+```{r f}
 pbp_selected_diff <- pbp_selected %>% 
   filter(season_type == "REG") %>% 
   group_by(home_team) %>% 
@@ -160,7 +160,92 @@ pbp_diff_comb <- rbind(pbp_selected_diff1,pbp_selected_diff2) %>%
   unique()
 
 pbp_diff_comb
+
+
+# Creating a csv file of point differential
+write_csv(pbp_diff_comb, "poinit_diffential.csv")
 ```
 
+
+### Visualizing the dataset
+```{r g}
+pbp_ptdiff_comb <- read_csv("poinit_diffential.csv")
+
+teams_colors_logos <- load_teams()
+teams_colors_logos_logo <- teams_colors_logos %>% 
+  select(team_abbr,team_name,team_logo_espn,team_wordmark,team_color,team_color2)
+
+pbp_ptdiff_comb_modified <- pbp_ptdiff_comb %>% 
+  left_join(teams_colors_logos_logo, by = c("team"="team_abbr"))
+
+options(timeout = 300)
+pbp_ptdiff_comb_modified %>% 
+  ggplot(mapping = aes(x = reorder(team_name, pf),y = pf)) +
+  geom_bar(aes(fill = team_color, colour = team_color2), stat = "identity") +
+  scale_color_identity(aesthetics = c("fill","color")) +
+  geom_image(aes(y = pf + 11, image = team_logo_espn), 
+             asp = 16/9, size = 0.025) +
+  labs(x = "Team",
+       y = "PF",
+       title = "Bar chart of Total Points Scored by Each Team",
+       subtitle = "2023 Season W1 - W18 | Data via NFLReadr",
+       caption = "Ayorinde Ayomide David") +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  face = "bold",
+                                  size = 20),
+        plot.subtitle = element_text(hjust = 0.5),
+        axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+pbp_ptdiff_comb_modified %>% 
+  ggplot(mapping = aes(x = pf,
+                       y = pa)) +
+  geom_abline(slope = -1, intercept = 0, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = 50, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = -50, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = 100, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = -100, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = 150, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = -150, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = 200, color = "grey", alpha = 0.5)+
+  geom_abline(slope = -1, intercept = -200, color = "grey", alpha = 0.5)+
+  scale_y_reverse() +
+  geom_image(aes(image = team_logo_espn),
+             asp = 16/19,
+             size = 0.04) +
+  labs(x = "Point For",
+       y = "Point Against",
+       title = "NFL Points For and Against",
+       subtitle = "2023 Season W1-W18 | Data via NFLReadr",
+       caption= "Ayorinde Ayomide David") +
+  theme(plot.title = element_text(hjust = 0.5, 
+                                  face = "bold",
+                                  size = 20),
+        plot.subtitle = element_text(hjust = 0.5)
+  )
+
+
+
+pbp_ptdiff_comb_modified %>% 
+  reframe(team_wordmark,pf,pa,pt_diff) %>% 
+  arrange(-pt_diff) %>% 
+  gt() %>% 
+  gt_img_rows(team_wordmark) %>% 
+  cols_label(team_wordmark = "Team",
+             pf = "PF",
+             pa = "PA",
+             pt_diff = "PD") %>% 
+  cols_align(align = "center") %>% 
+  gt_theme_espn() %>% 
+  tab_header(title = "Team Point Differentials 2023/24 Season") %>% 
+  data_color(columns = c(pt_diff),
+             target_columns = c(pt_diff),
+             colors = scales::col_numeric(
+               palette = c("tomato3", "green4"),
+               domain = NULL
+             ))
+  
+
+```
   
 
