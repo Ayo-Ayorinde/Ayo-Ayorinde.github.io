@@ -4,6 +4,19 @@ author: "Ayorinde Ayomide David"
 date: "2025-07-28"
 categories: [code, analysis, r]
 image: nfl.jpg
+
+format:
+  html:
+    code-fold: true
+    code-summary: "Code"
+    toc: true
+    toc-depth: 4
+    toc-location: right
+    highlight-style: github  # syntax highlight for code blocks
+    code-copy: true
+    code-overflow: wrap
+    css: styles.css  
+    
 ---
 
 ---
