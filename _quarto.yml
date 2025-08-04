@@ -1,12 +1,31 @@
 project:
   type: website
   output-dir: "docs"
+  
+language: 
+  search-text-placeholder: Search
 
 website:
   title: "Ayorinde Ayomide David"
-  favicon: favicon.png
-  navbar:
   
+  favicon: favicon.png
+  
+  search: 
+    type: textbox
+  
+  site-url: https://ayo-ayorinde.github.io
+  
+  announcement: 
+    icon: bell
+    dismissable: true
+    content: >
+      **Announcement** – Welcome to my portfolio website, a curated space highlighting my academic journey, research endeavors, and analytical projects. Feel free to explore, connect, and engage with my work. 
+    position: below-navbar
+    type: light
+  
+  navbar:
+      collapse: false
+      logo: favicon.png
       left: 
         - text: "Home"
           file: index.qmd
@@ -26,9 +45,7 @@ website:
 
 format:
   html:
-    theme:
-      - cosmo
-      - brand
+    theme: united
     css: styles.css
 
 
