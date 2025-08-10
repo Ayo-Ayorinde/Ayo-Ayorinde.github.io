@@ -1,6 +1,4 @@
----
-format: html
----
 
-<iframe src="Ayo_C.V.pdf" width="100%" height="1000px" style="border: none;"></iframe>
 
+![](Ayorinde%20Ayomide%20C.V.pdf){width=100%,
+height=1000px
