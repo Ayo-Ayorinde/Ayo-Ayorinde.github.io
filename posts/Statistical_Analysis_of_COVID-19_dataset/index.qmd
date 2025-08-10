@@ -4,6 +4,18 @@ author: "Ayorinde Ayomide David"
 date: "2025-07-27"
 categories: [code, analysis, r]
 image: "image.jpg"
+
+format:
+  html:
+    code-fold: true
+    code-summary: "Code"
+    toc: true
+    toc-depth: 4
+    toc-location: right
+    highlight-style: github  # syntax highlight for code blocks
+    code-copy: true
+    code-overflow: wrap
+    css: styles.css  
 ---
 
 In this project, I explored a COVID-19 dataset using R to validate (or challenge) some of the claims and narratives that circulated during the pandemic.

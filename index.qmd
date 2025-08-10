@@ -1,5 +1,6 @@
 ---
 title: "Ayorinde Ayomide David"
+subtitle: "Data Analyst | Researcher | Statistician"
 image: ayo.jpg
 about:
   template: jolla
