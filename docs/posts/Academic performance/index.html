@@ -193,6 +193,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </ul></li>
   <li><a href="#combined-effect-of-age-gender-college-affiliation-on-the-class-of-degree-attained" id="toc-combined-effect-of-age-gender-college-affiliation-on-the-class-of-degree-attained" class="nav-link" data-scroll-target="#combined-effect-of-age-gender-college-affiliation-on-the-class-of-degree-attained">Combined Effect of Age, Gender, College Affiliation on the Class of Degree Attained</a></li>
   </ul></li>
+  <li><a href="#limitations-of-the-study" id="toc-limitations-of-the-study" class="nav-link" data-scroll-target="#limitations-of-the-study">Limitations of the Study</a></li>
+  <li><a href="#recommendations" id="toc-recommendations" class="nav-link" data-scroll-target="#recommendations">Recommendations</a></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
     </div>
@@ -235,6 +238,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="BGS.jpg" class="img-fluid quarto-figure quarto-figure-center figure-img"></p>
+</figure>
+</div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 <p>Academic performance remains a central concern for educators, policymakers, and researchers, especially in higher education institutions where various individual and institutional factors may shape students’ academic outcomes. While curriculum content and instructional methods often receive primary attention, growing evidence suggests that demographic characteristics such as age, gender, and academic discipline may significantly influence students’ academic achievements.</p>
@@ -262,23 +270,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">gt</span>(<span class="fu">data.frame</span>(<span class="at">Variable_Name =</span> <span class="fu">c</span>(<span class="st">"matriculation_no"</span>, <span class="st">"state"</span>, <span class="st">"courseof_study"</span>, <span class="st">"class_of_grade"</span>, <span class="st">"marital_status"</span>,<span class="st">"gender"</span>, <span class="st">"date_of_birth"</span>, <span class="st">"college"</span>, <span class="st">"department_code"</span>, <span class="st">"age"</span>, <span class="st">"region"</span>), <span class="at">Description =</span> <span class="fu">c</span>(<span class="st">"A unique identifier for each student"</span>, <span class="st">"The Nigeria state attributed to the graduate"</span>, <span class="st">"The degree programme pursued by the graduate"</span>,<span class="st">"The final class of degree awarded to the student"</span>, <span class="st">"The marital status of the graduate (Married or Single)"</span>,<span class="st">"The sex of the graduate (Male or Female)"</span>,<span class="st">"The graduate date of birth"</span>, <span class="st">"The academic unit or faculty under which the student graduated"</span>, <span class="st">"Abbreviated code representing the graduate's department"</span>, <span class="st">"Age of graduate"</span>, <span class="st">"The Nigeria region attributed to the graduate"</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div id="lyrjgjkcvd" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
-<style>#lyrjgjkcvd table {
+<div id="rsoueoxftj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<style>#rsoueoxftj table {
   font-family: system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#lyrjgjkcvd thead, #lyrjgjkcvd tbody, #lyrjgjkcvd tfoot, #lyrjgjkcvd tr, #lyrjgjkcvd td, #lyrjgjkcvd th {
+#rsoueoxftj thead, #rsoueoxftj tbody, #rsoueoxftj tfoot, #rsoueoxftj tr, #rsoueoxftj td, #rsoueoxftj th {
   border-style: none;
 }
 
-#lyrjgjkcvd p {
+#rsoueoxftj p {
   margin: 0;
   padding: 0;
 }
 
-#lyrjgjkcvd .gt_table {
+#rsoueoxftj .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -304,12 +312,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_caption {
+#rsoueoxftj .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#lyrjgjkcvd .gt_title {
+#rsoueoxftj .gt_title {
   color: #333333;
   font-size: 125%;
   font-weight: initial;
@@ -321,7 +329,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#lyrjgjkcvd .gt_subtitle {
+#rsoueoxftj .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -333,7 +341,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#lyrjgjkcvd .gt_heading {
+#rsoueoxftj .gt_heading {
   background-color: #FFFFFF;
   text-align: center;
   border-bottom-color: #FFFFFF;
@@ -345,13 +353,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_bottom_border {
+#rsoueoxftj .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_col_headings {
+#rsoueoxftj .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -366,7 +374,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_col_heading {
+#rsoueoxftj .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -386,7 +394,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#lyrjgjkcvd .gt_column_spanner_outer {
+#rsoueoxftj .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -398,15 +406,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#lyrjgjkcvd .gt_column_spanner_outer:first-child {
+#rsoueoxftj .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#lyrjgjkcvd .gt_column_spanner_outer:last-child {
+#rsoueoxftj .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#lyrjgjkcvd .gt_column_spanner {
+#rsoueoxftj .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -418,11 +426,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#lyrjgjkcvd .gt_spanner_row {
+#rsoueoxftj .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#lyrjgjkcvd .gt_group_heading {
+#rsoueoxftj .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -448,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#lyrjgjkcvd .gt_empty_group_heading {
+#rsoueoxftj .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -463,15 +471,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#lyrjgjkcvd .gt_from_md > :first-child {
+#rsoueoxftj .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#lyrjgjkcvd .gt_from_md > :last-child {
+#rsoueoxftj .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#lyrjgjkcvd .gt_row {
+#rsoueoxftj .gt_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -490,7 +498,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#lyrjgjkcvd .gt_stub {
+#rsoueoxftj .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -503,7 +511,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#lyrjgjkcvd .gt_stub_row_group {
+#rsoueoxftj .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -517,15 +525,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#lyrjgjkcvd .gt_row_group_first td {
+#rsoueoxftj .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#lyrjgjkcvd .gt_row_group_first th {
+#rsoueoxftj .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#lyrjgjkcvd .gt_summary_row {
+#rsoueoxftj .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -535,16 +543,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#lyrjgjkcvd .gt_first_summary_row {
+#rsoueoxftj .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_first_summary_row.thick {
+#rsoueoxftj .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#lyrjgjkcvd .gt_last_summary_row {
+#rsoueoxftj .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -554,7 +562,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_grand_summary_row {
+#rsoueoxftj .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -564,7 +572,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#lyrjgjkcvd .gt_first_grand_summary_row {
+#rsoueoxftj .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -574,7 +582,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_last_grand_summary_row_top {
+#rsoueoxftj .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -584,11 +592,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_striped {
+#rsoueoxftj .gt_striped {
   background-color: rgba(128, 128, 128, 0.05);
 }
 
-#lyrjgjkcvd .gt_table_body {
+#rsoueoxftj .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -597,7 +605,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_footnotes {
+#rsoueoxftj .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -611,7 +619,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_footnote {
+#rsoueoxftj .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -620,7 +628,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#lyrjgjkcvd .gt_sourcenotes {
+#rsoueoxftj .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -634,7 +642,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#lyrjgjkcvd .gt_sourcenote {
+#rsoueoxftj .gt_sourcenote {
   font-size: 90%;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -642,72 +650,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#lyrjgjkcvd .gt_left {
+#rsoueoxftj .gt_left {
   text-align: left;
 }
 
-#lyrjgjkcvd .gt_center {
+#rsoueoxftj .gt_center {
   text-align: center;
 }
 
-#lyrjgjkcvd .gt_right {
+#rsoueoxftj .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#lyrjgjkcvd .gt_font_normal {
+#rsoueoxftj .gt_font_normal {
   font-weight: normal;
 }
 
-#lyrjgjkcvd .gt_font_bold {
+#rsoueoxftj .gt_font_bold {
   font-weight: bold;
 }
 
-#lyrjgjkcvd .gt_font_italic {
+#rsoueoxftj .gt_font_italic {
   font-style: italic;
 }
 
-#lyrjgjkcvd .gt_super {
+#rsoueoxftj .gt_super {
   font-size: 65%;
 }
 
-#lyrjgjkcvd .gt_footnote_marks {
+#rsoueoxftj .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#lyrjgjkcvd .gt_asterisk {
+#rsoueoxftj .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#lyrjgjkcvd .gt_indent_1 {
+#rsoueoxftj .gt_indent_1 {
   text-indent: 5px;
 }
 
-#lyrjgjkcvd .gt_indent_2 {
+#rsoueoxftj .gt_indent_2 {
   text-indent: 10px;
 }
 
-#lyrjgjkcvd .gt_indent_3 {
+#rsoueoxftj .gt_indent_3 {
   text-indent: 15px;
 }
 
-#lyrjgjkcvd .gt_indent_4 {
+#rsoueoxftj .gt_indent_4 {
   text-indent: 20px;
 }
 
-#lyrjgjkcvd .gt_indent_5 {
+#rsoueoxftj .gt_indent_5 {
   text-indent: 25px;
 }
 
-#lyrjgjkcvd .katex-display {
+#rsoueoxftj .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#lyrjgjkcvd div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#rsoueoxftj div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1090,40 +1098,88 @@ X-squared = 266.99, df = NA, p-value = 0.000294</code></pre>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>model_orl <span class="ot">&lt;-</span> <span class="fu">polr</span>(class_of_grade <span class="sc">~</span> age <span class="sc">+</span> college <span class="sc">+</span> gender, <span class="at">data =</span> nysc_list_modified_cleaned, <span class="at">Hess =</span> T)</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model_orl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>ctable <span class="ot">&lt;-</span> <span class="fu">coef</span>(<span class="fu">summary</span>(model_orl))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">pnorm</span>(<span class="fu">abs</span>(ctable[, <span class="st">"t value"</span>]), <span class="at">lower.tail =</span> F) <span class="sc">*</span> <span class="dv">2</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>OR <span class="ot">&lt;-</span> <span class="fu">exp</span>(<span class="fu">coef</span>(model_orl))</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ctable[<span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>], <span class="st">"Odds ratio"</span> <span class="ot">=</span> OR , <span class="st">"P value"</span><span class="ot">=</span> p[<span class="dv">1</span><span class="sc">:</span><span class="dv">11</span>])</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>result</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
-<pre><code>Call:
-polr(formula = class_of_grade ~ age + college + gender, data = nysc_list_modified_cleaned, 
-    Hess = T)
-
-Coefficients:
-                    Value Std. Error    t value
-age              -0.02427  1.663e-02 -1.459e+00
-collegeCOLANIM   -0.28224  1.357e-01 -2.080e+00
-collegeCOLBIOS   -0.32851  1.430e-01 -2.297e+00
-collegeCOLENG     0.52867  1.837e-01  2.878e+00
-collegeCOLERM    -0.61081  1.489e-01 -4.102e+00
-collegeCOLFHEC    0.03021  1.453e-01  2.079e-01
-collegeCOLMAS   -11.58338  3.476e-06 -3.332e+06
-collegeCOLPHYS   -0.95280  1.351e-01 -7.055e+00
-collegeCOLPLANT  -0.99820  1.398e-01 -7.142e+00
-collegeCOLVET     0.27960  3.674e-01  7.610e-01
-genderM          -0.69664  7.407e-02 -9.405e+00
-
-Intercepts:
-                                      Value         Std. Error    t value      
-Third Class|Second Class Lower              -4.9785        0.4337      -11.4800
-Second Class Lower|Second Class Upper       -1.4364        0.4201       -3.4192
-Second Class Upper|First Class               2.0810        0.4263        4.8813
-
-Residual Deviance: 6087.421 
-AIC: 6115.421 </code></pre>
+<pre><code>                       Value   Std. Error       t value   Odds ratio
+age              -0.02426998 1.663338e-02 -1.459113e+00 9.760222e-01
+collegeCOLANIM   -0.28224024 1.357237e-01 -2.079521e+00 7.540925e-01
+collegeCOLBIOS   -0.32851443 1.430438e-01 -2.296600e+00 7.199925e-01
+collegeCOLENG     0.52866904 1.836697e-01  2.878368e+00 1.696673e+00
+collegeCOLERM    -0.61080835 1.488892e-01 -4.102436e+00 5.429118e-01
+collegeCOLFHEC    0.03020859 1.453024e-01  2.079015e-01 1.030670e+00
+collegeCOLMAS   -11.58337687 3.475947e-06 -3.332438e+06 9.319730e-06
+collegeCOLPHYS   -0.95280454 1.350520e-01 -7.055093e+00 3.856579e-01
+collegeCOLPLANT  -0.99819910 1.397701e-01 -7.141719e+00 3.685426e-01
+collegeCOLVET     0.27959711 3.674249e-01  7.609639e-01 1.322597e+00
+genderM          -0.69664325 7.406773e-02 -9.405489e+00 4.982550e-01
+                     P value
+age             1.445341e-01
+collegeCOLANIM  3.756949e-02
+collegeCOLBIOS  2.164159e-02
+collegeCOLENG   3.997391e-03
+collegeCOLERM   4.088231e-05
+collegeCOLFHEC  8.353059e-01
+collegeCOLMAS   0.000000e+00
+collegeCOLPHYS  1.724848e-12
+collegeCOLPLANT 9.217057e-13
+collegeCOLVET   4.466786e-01
+genderM         5.178873e-21</code></pre>
 </div>
 </div>
-
-
+<p><strong>Interpretation</strong></p>
+<ul>
+<li><p>For each additional year of age, the odds of being in a higher outcome category decrease by ~2.4%, but not statistically significant (p = 0.145).</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLANIM reduces the odds of being in the higher category by 24.6% . Statistically significant at p &lt; 0.05</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLBIOS reduces the odds of being in higher category by 28%. Statistically significant at p &lt; 0.05</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLENG increases the odds of being in higher category by 70%. Highy significant at p &lt; 0.01</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLERM reduces the odds of being in higher category by 45.7%. Highly significant at p &lt; 0.01</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLFHEC has small effect and the effect is not statistically significant(p &gt; 0.05)</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLMAS has extremely large negative effect and this is due to the fact that the college produced one graduate for the 2023/24 Academic session</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLPHYS reduces odds of being in the higher category by 61%. Extremely significant at p &lt; 0.01</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLPLANT reduces the odds of being in the higher category by 63%. Extremely significant at p &lt; 0.01</p></li>
+<li><p>Compared to the reference group(COLAMRUD), being in COLVET increases the odds of being in the higher category by 32%. Not statistically significant(p &gt; 0.05)</p></li>
+<li><p>Compared to being female, being male reduces the odds of being in a higher category by 50%. Extremely significant at p &lt; 0.01</p></li>
+</ul>
+<p>Gender:</p>
+<p>Male: OR = 0.50, p ≈ 5.18e-21 → Males have about half the odds of being in a higher outcome category compared to females, highly significant.</p>
+<p><strong>In summary:</strong></p>
+<ul>
+<li><p>being male, or being in several of the colleges above strongly reduces the odds of higher class of degree/grade.</p></li>
+<li><p>being in Engineering increases odds of higher class of degree/grade</p></li>
+<li><p>age doesn’t seem to matter much in this dataset.</p></li>
+</ul>
 </section>
+</section>
+<section id="limitations-of-the-study" class="level2">
+<h2 class="anchored" data-anchor-id="limitations-of-the-study">Limitations of the Study</h2>
+<ul>
+<li><p>Model Evaluation Constraints The study could not fully assess the overall model significance due to incomplete deviance-related outputs. Specifically, the null deviance was unavailable, making it impossible to perform a formal likelihood ratio test to compare the fitted model against a null model. While the AIC was computed, its interpretation was limited without the corresponding null deviance and model comparison context.</p></li>
+<li><p>Data Availability The analysis was constrained by the availability and completeness of the dataset. Some potentially relevant variables were either missing or aggregated, limiting the ability to explore more granular relationships and potential confounders.</p></li>
+<li><p>Scope of the Study The study was conducted within a specific context and timeframe, focusing only on the variables included in the available dataset. This scope restriction means the findings may not be directly generalizable to other settings or populations without further validation.</p></li>
+</ul>
+</section>
+<section id="recommendations" class="level2">
+<h2 class="anchored" data-anchor-id="recommendations">Recommendations</h2>
+<ul>
+<li><p>Since the chi-square test showed significant associations between certain demographic variables (gender/ college affiliation) and academic performance, students should be aware of the patterns and challenges associated with their group and seek targeted academic support where necessary.</p></li>
+<li><p>Results indicate that gender significantly influences the likelihood of attaining higher academic classes. This highlights the importance of encouraging male students to actively seek additional academic support, mentoring, and engagement in learning activities. Student leaders and academic bodies could implement targeted study groups, skill-building workshops, and counseling programs aimed at bridging potential performance gaps.</p></li>
+<li><p>Where performance differences were observed between colleges or demographic categories, students can benefit from cross-college study groups or mentorship to share strategies that work in high-performing clusters.</p></li>
+<li><p>Students falling into categories with lower predicted probabilities of high academic achievement (based on the regression model) should seek academic counselling early, utilize available resources, and adopt structured study plans to improve outcomes.</p></li>
+</ul>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>This study successfully applied chi-square test of independence to evaluate the association between the categorical variables and ordinal logistic regression to examine the relationship between predictor variables and the ordered outcome. The ordered logistioc model identified significant predictors and provided interpretable odds ratios, enhancing understanding of how the independent variables influence the likelihood of moving between categories. However, while the findings are insightful, they should be interpreted in light of the study’s limitations, especially regarding sample scope, potential omitted variables, and model assumptions. Future research incorporating broader, more diverse datasets and robust assumption checks will help validate and extend these results.</p>
+
+
 </section>
 
 </main> <!-- /main -->
