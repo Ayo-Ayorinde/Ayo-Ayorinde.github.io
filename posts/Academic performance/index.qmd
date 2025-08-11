@@ -142,15 +142,15 @@ nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%    # Changing the c
                                  ordered = T),
          gender = factor(gender),
          college = factor(college))
+
+# nysc_list_modified_cleaned %>% # This was done to have a thorough look at each unique entry of each column of the dataset in order to have the dataset cleaned appropriately. It was commented out to avoid much digression while going through the study.
+  #dplyr::select(-id) %>% 
+  #tbl_summary()
 ```
 
 ### Data Manipulation and Transformation
 
 ```{r}
-
-nysc_list_modified_cleaned %>% # Inspecting the entries of each column excluding the id column
-  dplyr::select(-id) %>% 
-  tbl_summary()
 
 nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%  # Cleaning the entries of statename for control
   mutate(statename = case_when(statename == "Akwa Ibom State" ~ "Akwa-Ibom State",
@@ -195,7 +195,7 @@ nysc_list_modified_cleaned %>%
 
 ```
 
-The bar chart above provides a visual representation of the distribution of gender across academic performance categories. It offers an initial impression of how male and female graduates are spread across the different classifications of academic achievement (such as First Class, Second Class Upper, etc.). While the chart reveals some observable patterns — such as possible concentration or variation in specific degree classes for each gender — it does not offer conclusive evidence of a statistically significant relationship between gender and academic performance.
+The bar chart above provides a visual representation of the distribution of gender across academic performance categories. It offers an initial impression of how male and female graduates are spread across the different classifications of academic achievement (such as First Class, Second Class Upper, etc.). While the chart reveals some observable patterns such as possible concentration or variation in specific degree classes for each gender, it does not offer conclusive evidence of a statistically significant relationship between gender and academic performance.
 
 Given that both variables involved are categorical in nature (gender and class of degree), visual inspection alone is insufficient to determine whether an association truly exists between them or if any observed differences are simply due to random variation. Therefore, to formally assess whether a statistically significant relationship exists between gender and academic performance, it is necessary to conduct a Chi-square test of independence. This test will help determine whether the variables are associated or independent of one another.
 
@@ -219,7 +219,7 @@ nysc_list_modified_cleaned %>% # Finding the chi-square test of independence
 
 **Decision rule:** If p-value is less than 0.05, we reject null hypothesis, otherwise, we fail to reject null hypothesis.
 
-**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between gender and academic achievement. Hence, we conclude that there is association between gender and academic achievement.
+**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between gender and academic achievement. Hence, we conclude that there is a difference in gender proportion across the class of degree groups.
 
 ### College as a Predictor of Academic Achievement
 
@@ -227,7 +227,8 @@ nysc_list_modified_cleaned %>% # Finding the chi-square test of independence
 
 ```{r}
 nysc_list_modified_cleaned %>% 
-  filter(college %in% c("COLANIM", "COLAMRUD","COLENG", "COLBIOS", "COLFHEC", "COLERM", "COLPLANT", "COLVET", "COLPHYS")) %>% # COLMAS was dropped because it produced just one graduate which could consequently flaw our analysis
+  filter(college %in% c("COLANIM", "COLAMRUD","COLENG", "COLBIOS", "COLFHEC", "COLERM", "COLPLANT", "COLVET", "COLPHYS")) %>% # 
+  droplevels() %>% # COLMAS was filtered and dropped because she produced just one graduate
   ggplot(mapping = aes(x =class_of_grade,fill =  college)) +
   geom_bar(position = "dodge") +
   labs(x = "Class of Grade",
@@ -267,9 +268,7 @@ cross_tab
 ```
 
 
-In this phase of the analysis, the objective is to determine whether there is a significant association between college affiliation and class of degree attained among the graduates under study. The Chi-square test of independence is a widely used statistical method for evaluating such relationships between categorical variables. However, one of its key assumptions is that the expected frequency in each cell of the contingency table should be at least 5.
-
-While the dataset contains a large overall number of observations, certain combinations of college and class of degree — particularly those representing less common degree classifications within specific colleges — have small observed and expected counts. This violates the minimum expected frequency requirement, meaning that the standard Chi-square test’s p-value may be unreliable.
+In this phase of the analysis, the objective is to determine whether there is a significant association between college affiliation and class of degree attained among the graduates under study. While the dataset contains a large overall number of observations, certain combinations of college and class of degree — particularly those representing less common degree classifications within specific colleges — have small observed and expected counts. This violates the minimum expected frequency requirement, meaning that the standard Chi-square test’s p-value may be unreliable.
 
 To address this issue, the Monte Carlo simulation version of the Chi-square test was employed. This method involves generating a large number of random contingency tables under the assumption of independence, with the marginal totals fixed. For each simulated table, the Chi-square statistic is calculated, and the p-value is estimated empirically as the proportion of simulated statistics equal to or greater than the observed statistic.
 
@@ -283,21 +282,18 @@ cross_tab%>%
 
 **Decision rule:** If p-value is less than 0.05, we reject null hypothesis, otherwise, we fail to reject null hypothesis.
 
-**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between college and academic achievement. Hence, we conclude that there is association between college and academic achievement.
+**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between college and academic achievement. Hence, we conclude that there is a difference in college proportion across the class of degree groups.
 
 
 #### Post-Hoc Test
 
-The Monte Carlo Chi-square test of independence revealed a statistically significant association between college affiliation and class of degree attained. While this finding establishes that a relationship exists, the Chi-square test does not indicate which specific combinations of categories contribute most to the association. To gain deeper insight, a post hoc analysis was conducted.
-
-Post hoc testing in this context serves to identify the exact College–Class of Degree pairs that deviate significantly from the expected counts under the null hypothesis of independence. This was achieved by examining the standardized residuals from the Chi-square test. Standardized residuals represent the difference between the observed and expected frequencies in each cell of the contingency table, expressed in standard deviation units. Large positive residuals indicate that a particular combination occurred more frequently than expected, while large negative residuals indicate it occurred less frequently than expected.
-
-To control for the increased risk of Type I errors arising from multiple comparisons, the p-values corresponding to the residuals were adjusted using the Bonferroni correction method. This adjustment ensures that the identification of significant cells remains statistically rigorous.
+The Monte Carlo Chi-square test of independence revealed a statistically significant association between college affiliation and class of degree attained. While this finding establishes that a relationship exists, the Chi-square test does not indicate which specific combinations of categories contribute most to the association. To gain deeper insight, a post hoc analysis will be conducted.
 
 Through this post hoc analysis, the study not only confirms the presence of a relationship between college affiliation and class of degree but also pinpoints the specific areas where the patterns differ, thereby providing more actionable and interpretable findings.
 
 
 ```{r}
+set.seed(200)
 rcompanion::pairwiseNominalIndependence(cross_tab,
                             fisher = T,
                             gtest = F,
@@ -310,7 +306,7 @@ rcompanion::pairwiseNominalIndependence(cross_tab,
 ```
 
 
-Post hoc pairwise comparisons using the Chi-square test with Bonferroni adjustment revealed several significant differences in class-of-degree distribution between colleges. Notably, the difference between COLFHEC and COLPLANT was statistically significant (adjusted p = 0.00076) with a Cramér’s V of 0.353, indicating a medium association. Similarly, COLENG vs. COLPHYS (adjusted p = 0.00076, Cramér’s V = 0.297) and COLFHEC vs. COLPHYS (adjusted p = 0.00076, Cramér’s V = 0.329) showed moderate associations. Other significant comparisons, such as COLPHYS vs. COLPLANT (adjusted p = 0.00125, Cramér’s V = 0.138), had smaller effect sizes, suggesting weaker practical differences despite statistical significance.
+Post hoc pairwise comparisons using the Chi-square test with Bonferroni adjustment revealed several significant differences in class-of-degree distribution between colleges. Notably, the difference between COLFHEC and COLPLANT was statistically significant (adjusted p = 0.000706) with a Cramér’s V of 0.353, indicating a medium association. Similarly, COLENG vs. COLPHYS (adjusted p = 0.000706, Cramér’s V = 0.297) and COLFHEC vs. COLPHYS (adjusted p = 0.00076, Cramér’s V = 0.329) showed moderate associations. Other significant comparisons, such as COLPHYS vs. COLPLANT (adjusted p = 0.00125, Cramér’s V = 0.138), had smaller effect sizes, suggesting weaker practical differences despite statistical significance.
 
 
 ### Combined Effect of Age, Gender, College Affiliation on the Class of Degree Attained
