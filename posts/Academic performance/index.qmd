@@ -1,0 +1,329 @@
+---
+title: "A Cross-Sectional Study of the Effect of Age, College, and Sex on Academic Performance among FUNAAB Graduates Mobilized for NYSC in 2024."
+author: "Ayorinde Ayomide David"
+date: "2025-08-12"
+categories: [code, analysis, r]
+image: BGS.jpg
+
+format:
+  html:
+    code-fold: true
+    code-summary: "Code"
+    toc: true
+    toc-depth: 4
+    toc-location: right
+    highlight-style: github  # syntax highlight for code blocks
+    code-copy: true
+    code-overflow: wrap
+    css: styles.css  
+
+---
+
+---
+title: "A Cross-Sectional Study of the Effect of Age, College and Sex on Academic
+  Performance among FUNAAB Graduates Mobilized for NYSC in 2024"
+author: "Ayorinde Ayomide David"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+	echo = TRUE,
+	message = FALSE,
+	warning = FALSE
+)
+# Loading the dependencies
+
+
+if(!require(pacman)) install.packages("pacman")
+
+pacman::p_load(tidyverse,
+               janitor,
+               visdat,
+               gtsummary,
+               inspectdf,
+               here,
+               lubridate,
+               gt,
+               rcompanion,
+               ordinal,
+              MASS)
+```
+
+## Introduction
+
+Academic performance remains a central concern for educators, policymakers, and researchers, especially in higher education institutions where various individual and institutional factors may shape students' academic outcomes. While curriculum content and instructional methods often receive primary attention, growing evidence suggests that demographic characteristics such as age, gender, and academic discipline may significantly influence students’ academic achievements.
+
+Age has been associated with varying levels of academic maturity, motivation, and learning capacity. Younger students may possess cognitive flexibility but lack the life experience that older students bring to their studies. Similarly, gender disparities in academic performance, often shaped by socio-cultural expectations and opportunities, continue to attract scholarly interest. In Nigeria and beyond, gender-based performance gaps have been observed across academic disciplines, with conflicting findings on whether male or female students outperform their counterparts.
+
+Additionally, the academic department or field of study introduces another layer of complexity. Differences in academic rigor, grading policies, and student support structures across departments may contribute to observable disparities in academic outcomes. However, using department as a predictor can be statistically problematic due to sample size imbalances and high variability. As such, grouping departments into broader academic units such as colleges offers a more stable and interpretable approach to understanding institutional influences on performance.
+
+This study aims to examine the influence of age, gender, and college affiliation on the academic performance of graduates from the Federal University of Agriculture, Abeokuta (FUNAAB), using data from the 2023/2024 NYSC mobilization list. Academic performance is operationalized using the class of degree attained, which serves as a reliable proxy in the absence of raw CGPA. By focusing on a single graduating cohort, the study offers a cross-sectional snapshot of demographic and institutional patterns that may underlie academic success. The findings will provide insights into potential equity issues and inform academic support strategies within the university setting.
+
+## Objective of the Study
+
+The primary objective of this study is to examine the effect of age, gender, college affiliation, and region of origin on the academic performance of graduates from the Federal University of Agriculture, Abeokuta, using the 2023/2024 NYSC mobilization list.
+
+Specifically, the study seeks to:
+
+-   Assess the relationship between gender and academic performance among the graduates.
+
+-   Evaluate the extent to which college affiliation (as a proxy for department) affects academic outcomes.
+
+-   Explore the combined effect of age, gender, college affiliation, and region on the class of degree attained.
+
+## Data Description
+
+This dataset used in this study was obtained from the 2023/24 National Youth Service Corps (NYSC) mobilization list of the Federal University of Agriculture, Abeokuta (FUNAAB). This dataset comprises information on 3406 graduates who were successfully mobilized for national service.
+
+The dataset includes demographic, academic, and institutional variables relevant to the analysis of academic performance. Each row in the dataset represents an individual graduate, and the variables collected include:
+
+```{r a}
+gt(data.frame(Variable_Name = c("matriculation_no", "state", "courseof_study", "class_of_grade", "marital_status","gender", "date_of_birth", "college", "department_code", "age", "region"), Description = c("A unique identifier for each student", "The Nigeria state attributed to the graduate", "The degree programme pursued by the graduate","The final class of degree awarded to the student", "The marital status of the graduate (Married or Single)","The sex of the graduate (Male or Female)","The graduate date of birth", "The academic unit or faculty under which the student graduated", "Abbreviated code representing the graduate's department", "Age of graduate", "The Nigeria region attributed to the graduate")))
+```
+
+## Data Exploration, Cleaning, Manipulation and Transformation
+
+To begin the analysis, the necessary R packages were loaded, including tidyverse, gt, here, janitor, lubridate, and visdat, which collectively support data manipulation, visualization, and cleaning. Following this, the NYSC dataset was imported into the R environment. An initial assessment was conducted to determine the dataset's structure, including the number of rows and columns, and to preview the first ten records.
+
+The properties of each variable were inspected to understand data types and formats. Special attention was given to the Date of Graduation column, which was found to contain a substantial number of missing values. This observation was first noted during the structure inspection and subsequently confirmed using summary statistics and missing value checks.
+
+To preserve confidentiality and ensure ethical data handling, columns containing sensitive or personally identifiable information such as names, phone numbers,jamb registration number and matric numbers were excluded from the working dataset. A new CSV file was then generated to store this modified version of the dataset.
+
+Finally, data cleaning and transformation were carried out on the refined dataset. This included tasks such as deriving new variables (age and region), and preparing the data for statistical analysis.
+
+### Data Exploration
+
+```{r}
+
+#nysc <- read_csv(here("Data/NYSC.csv"))    # Loading the dataset into R
+
+#dim(nysc) # Investigating the dimension of the dataset
+
+#head(nysc, n= 10) # Exploring the first 10 rows of the dataset
+
+#glimpse(nysc)    # Investigating the properties of the dataset
+
+#sum(is.na(nysc$`Date of Graduation`))    # Investigating the number of missing values in the Date of Graduation colunm
+
+#nysc_list <- nysc %>% # Dropping private information columns and the column with no entry
+  #mutate(id = str_sub(JambNumber, -8, -1)) %>% 
+  #select(-c(Firstname,Middlename, Surname, MatriculationNo,JambNumber, Phone, `Date of Graduation`)) %>% 
+  #select(id, everything()) # This ensures the id column comes first in the dataset
+  
+
+#write_csv(nysc_list,"nysc_modified.csv") # Creating a csv file for the modified dataset
+
+```
+
+### Data Cleaning
+
+```{r}
+nysc_list_modified <- read_csv(here("posts/Academic performance/data/nysc_modified.csv")) # Loading the modified dataset into R
+
+vis_dat(nysc_list_modified) # Visualizing the dataset to investigate it's properties
+
+nysc_list_modified_cleaned <- nysc_list_modified %>%    # Cleaning the column name for consistency
+    clean_names()
+
+dup <- nysc_list_modified_cleaned %>%  # Identifying duplicated rows based on matriculation number
+  get_dupes(id)
+
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%    # Dropping duplicated rows
+  unique()
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%    # Changing the class of some of our categorical variable to allow for efficient data analysis
+  mutate(class_of_grade = factor(class_of_grade,
+                                     levels = c("Third Class","Second Class Lower", "Second Class Upper", "First Class"), 
+                                 ordered = T),
+         gender = factor(gender),
+         college = factor(college))
+```
+
+### Data Manipulation and Transformation
+
+```{r}
+
+nysc_list_modified_cleaned %>% # Inspecting the entries of each column excluding the id column
+  dplyr::select(-id) %>% 
+  tbl_summary()
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%  # Cleaning the entries of statename for control
+  mutate(statename = case_when(statename == "Akwa Ibom State" ~ "Akwa-Ibom State",
+                               statename == "Cross River State" ~ "Cross-River State",
+                               T ~ statename))
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>% # Splitting statename into state and state1 and dropping the latter
+  separate(statename, into = c("state", "state1"), sep = " ") %>% 
+  dplyr::select(-state1)
+  
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>%  # Creating the region column
+  mutate(region = case_when(state %in% c("Kaduna", "Kogi", "Niger", "Plateau", "Zamfara", "FCT") ~ "Northern",
+                             state %in% c("Abia", "Anambra", "Ebonyi", "Enugu", "Imo") ~ "Eastern",
+                             state %in% c("Akwa-Ibom", "Cross-River", "Delta", "Edo","Benue", "Rivers") ~ "Southern",
+                             state %in% c("Ekiti", "Kwara", "Lagos", "Ogun", "Ondo", "Osun", "Oyo") ~ "Western"))
+  
+
+nysc_list_modified_cleaned <- nysc_list_modified_cleaned %>% # Creating the age column
+  mutate(age = round(date_of_birth %--% dmy("02-08-2024")/years()))
+
+```
+
+## Data Analysis and Visualization
+
+### Gender as a Predictor of Academic Achievement
+
+-   Is gender associated with academic achievement?
+
+```{r}
+nysc_list_modified_cleaned %>% 
+  ggplot(mapping = aes(x = class_of_grade)) +
+  geom_bar(mapping = aes(fill = gender)) +
+  labs(x = "Class of Grade",
+       title = "Proportion of Gender within Each Class of Grade",
+       caption = "Source: FUNAAB 2023/24 NYSC List",
+       fill = "Gender")+
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  face = "bold",
+                                  size = 18))
+
+```
+
+The bar chart above provides a visual representation of the distribution of gender across academic performance categories. It offers an initial impression of how male and female graduates are spread across the different classifications of academic achievement (such as First Class, Second Class Upper, etc.). While the chart reveals some observable patterns — such as possible concentration or variation in specific degree classes for each gender — it does not offer conclusive evidence of a statistically significant relationship between gender and academic performance.
+
+Given that both variables involved are categorical in nature (gender and class of degree), visual inspection alone is insufficient to determine whether an association truly exists between them or if any observed differences are simply due to random variation. Therefore, to formally assess whether a statistically significant relationship exists between gender and academic performance, it is necessary to conduct a Chi-square test of independence. This test will help determine whether the variables are associated or independent of one another.
+
+#### Chi-Square Test of Independence
+
+H~o~: There is no association between gender and academic achievement.
+
+H~1~: There is association between gender and academic achievement.
+
+```{r}
+nysc_list_modified_cleaned %>% # Parsing gender and class of grade into a table
+  dplyr::select(gender,class_of_grade) %>% 
+  table()
+  
+
+nysc_list_modified_cleaned %>% # Finding the chi-square test of independence
+  dplyr::select(gender,class_of_grade) %>% 
+  table() %>%  
+  chisq.test()
+```
+
+**Decision rule:** If p-value is less than 0.05, we reject null hypothesis, otherwise, we fail to reject null hypothesis.
+
+**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between gender and academic achievement. Hence, we conclude that there is association between gender and academic achievement.
+
+### College as a Predictor of Academic Achievement
+
+-   Is college associated with academic achievement?
+
+```{r}
+nysc_list_modified_cleaned %>% 
+  filter(college %in% c("COLANIM", "COLAMRUD","COLENG", "COLBIOS", "COLFHEC", "COLERM", "COLPLANT", "COLVET", "COLPHYS")) %>% # COLMAS was dropped because it produced just one graduate which could consequently flaw our analysis
+  ggplot(mapping = aes(x =class_of_grade,fill =  college)) +
+  geom_bar(position = "dodge") +
+  labs(x = "Class of Grade",
+       fill = "College",
+       title = "Proportion of college Within Each Class of Grade") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5,
+                                  face = "bold",
+                                  size = 18))
+
+
+```
+
+Following the earlier bar chart on gender and academic performance, which offered insight into how degree classifications are distributed across male and female graduates, the current bar chart extends this exploration by examining the distribution of academic performance across different colleges. This comparison allows for a broader understanding of how academic outcomes vary not only by gender but also by institutional affiliation.
+
+As shown above, the chart provides a visual summary of how graduates from various colleges are represented within each degree classification (for example, First Class, Second Class Upper, and so on). While certain patterns may be visually apparent, such as possible concentrations of specific degree classes within some colleges, these observations are not enough to determine whether a meaningful relationship exists between college and academic performance.
+
+Because both variables, college and class of degree, are categorical, visual inspection alone is not sufficient. Any apparent differences might be due to random variation. To formally assess whether a statistically significant relationship exists, a Chi square test of independence is necessary. This will determine whether college affiliation is associated with academic performance or whether the observed differences occurred by chance.
+
+#### Chi-Square Test of independence
+
+
+H~o~: There is no association between gender and academic achievement.
+
+H~1~: There is association between gender and academic achievement.
+
+
+```{r}
+tab <- nysc_list_modified_cleaned %>% #Parsing college and class of grade into a table
+  filter(college %in% c("COLANIM", "COLAMRUD","COLENG", "COLBIOS", "COLFHEC", "COLERM", "COLPLANT", "COLVET", "COLPHYS")) %>% # filtering COLMAS out since just one graduate was produced by this college
+  dplyr::select(college, class_of_grade) %>% 
+  droplevels() # This drops the filtered COLMAS entry
+
+  
+cross_tab <- table(tab)
+cross_tab
+```
+
+
+In this phase of the analysis, the objective is to determine whether there is a significant association between college affiliation and class of degree attained among the graduates under study. The Chi-square test of independence is a widely used statistical method for evaluating such relationships between categorical variables. However, one of its key assumptions is that the expected frequency in each cell of the contingency table should be at least 5.
+
+While the dataset contains a large overall number of observations, certain combinations of college and class of degree — particularly those representing less common degree classifications within specific colleges — have small observed and expected counts. This violates the minimum expected frequency requirement, meaning that the standard Chi-square test’s p-value may be unreliable.
+
+To address this issue, the Monte Carlo simulation version of the Chi-square test was employed. This method involves generating a large number of random contingency tables under the assumption of independence, with the marginal totals fixed. For each simulated table, the Chi-square statistic is calculated, and the p-value is estimated empirically as the proportion of simulated statistics equal to or greater than the observed statistic.
+
+By using this approach, the analysis accounts for the uneven distribution of observations across categories, ensuring that the statistical inference regarding the relationship between college affiliation and class of degree is both valid and robust, even in the presence of small expected counts in some cells.
+
+```{r}
+cross_tab%>% 
+  chisq.test(simulate.p.value = T, B = 3400)
+```
+
+
+**Decision rule:** If p-value is less than 0.05, we reject null hypothesis, otherwise, we fail to reject null hypothesis.
+
+**Conclusion:** Since the p-value is less than 0.05, there is enough evidence to conclude that there is association between college and academic achievement. Hence, we conclude that there is association between college and academic achievement.
+
+
+#### Post-Hoc Test
+
+The Monte Carlo Chi-square test of independence revealed a statistically significant association between college affiliation and class of degree attained. While this finding establishes that a relationship exists, the Chi-square test does not indicate which specific combinations of categories contribute most to the association. To gain deeper insight, a post hoc analysis was conducted.
+
+Post hoc testing in this context serves to identify the exact College–Class of Degree pairs that deviate significantly from the expected counts under the null hypothesis of independence. This was achieved by examining the standardized residuals from the Chi-square test. Standardized residuals represent the difference between the observed and expected frequencies in each cell of the contingency table, expressed in standard deviation units. Large positive residuals indicate that a particular combination occurred more frequently than expected, while large negative residuals indicate it occurred less frequently than expected.
+
+To control for the increased risk of Type I errors arising from multiple comparisons, the p-values corresponding to the residuals were adjusted using the Bonferroni correction method. This adjustment ensures that the identification of significant cells remains statistically rigorous.
+
+Through this post hoc analysis, the study not only confirms the presence of a relationship between college affiliation and class of degree but also pinpoints the specific areas where the patterns differ, thereby providing more actionable and interpretable findings.
+
+
+```{r}
+rcompanion::pairwiseNominalIndependence(cross_tab,
+                            fisher = T,
+                            gtest = F,
+                            chisq = T,
+                            cramer = T,
+                            simulate.p.value = T, 
+                            B = 3400
+                           )
+
+```
+
+
+Post hoc pairwise comparisons using the Chi-square test with Bonferroni adjustment revealed several significant differences in class-of-degree distribution between colleges. Notably, the difference between COLFHEC and COLPLANT was statistically significant (adjusted p = 0.00076) with a Cramér’s V of 0.353, indicating a medium association. Similarly, COLENG vs. COLPHYS (adjusted p = 0.00076, Cramér’s V = 0.297) and COLFHEC vs. COLPHYS (adjusted p = 0.00076, Cramér’s V = 0.329) showed moderate associations. Other significant comparisons, such as COLPHYS vs. COLPLANT (adjusted p = 0.00125, Cramér’s V = 0.138), had smaller effect sizes, suggesting weaker practical differences despite statistical significance.
+
+
+### Combined Effect of Age, Gender, College Affiliation on the Class of Degree Attained
+
+
+The combined effect of age, gender and college affiliation on the class of degree attained can be examined within the framework of an ordinal logistic regression model, since the class of degree is an ordered categorical outcome. Age may account for variations in academic maturity, while gender could reflect potential disparities in academic engagement or performance. College affiliation captures institutional differences in academic standards, available resources, and programme demands. Modelling these predictors jointly allows for the assessment of both main effects and interaction terms, providing insight into whether the influence of one variable depends on the level of another. This approach ensures a comprehensive statistical evaluation of the multifactorial determinants of academic achievement.
+
+```{r}
+model_orl <- polr(class_of_grade ~ age + college + gender, data = nysc_list_modified_cleaned, Hess = T)
+
+summary(model_orl)
+```
+
+```{r}
+
+```
