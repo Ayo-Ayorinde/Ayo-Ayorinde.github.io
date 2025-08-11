@@ -234,7 +234,8 @@ nysc_list_modified_cleaned %>%
   geom_bar(position = "dodge") +
   labs(x = "Class of Grade",
        fill = "College",
-       title = "Proportion of college Within Each Class of Grade") +
+       title = "Proportion of college Within Each Class of Grade",
+       caption = "Source: FUNAAB 2023/24 NYSC List") +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5,
                                   face = "bold",
