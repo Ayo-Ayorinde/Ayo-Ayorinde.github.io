@@ -356,7 +356,7 @@ Male: OR = 0.50, p ≈ 5.18e-21 → Males have about half the odds of being in a
 
 -   being in Engineering increases odds of higher class of degree/grade
 
--   age doesn't seem to matter much in this dataset.
+-   age doesn't seem to matter much in this study.
 
 ## Limitations of the Study
 
