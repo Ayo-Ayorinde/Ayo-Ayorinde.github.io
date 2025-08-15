@@ -1,10 +1,8 @@
 ---
 title: "Analysis of NFL Dataset"
 author: "Ayorinde Ayomide David"
-date: "2025-07-28"
 categories: [code, analysis, r]
 image: nfl.jpg
-
 format:
   html:
     code-fold: true
@@ -16,19 +14,9 @@ format:
     code-copy: true
     code-overflow: wrap
     css: styles.css  
-    
----
-
----
-title: "Analysis of NFL Dataset"
-author: "Ayorinde Ayomide David"
-date: "`r Sys.Date()`"
-output: pdf_document
 editor_options: 
   chunk_output_type: console
 ---
-
-This project explores the data from the 2023/24 NFL season to provide valuable insight about the happenings of the season
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
@@ -37,10 +25,6 @@ knitr::opts_chunk$set(
 	warning = FALSE
 )
 
-```
-
-### Loading dependencies
-```{r a}
 if(!require(pacman)) install.packages("pacman") # installing the package manager
 
 pacman::p_load(tidyverse, #R meta-package
@@ -50,80 +34,92 @@ pacman::p_load(tidyverse, #R meta-package
                gtExtras,
                future,
                visdat,
+               janitor,
                inspectdf, # R library for visual EDA
                gtsummary) # R library for descriptive EDA
 
-```
-
-### Telling R to run future tasks in parallel i.e each on its own background session in R(seperate R process)
-```{r b}
 plan("multisession")
 options(timeout = 300) # Timeout of 60secs was reached without the dataset being loaded. Hence, the need to manually increase the timeout limit to  5 mins
+
 ```
 
-### Loading NFL data for 2023/24 season
+![](nfl.jpg){fig-align="center"}
+
+## Introduction
+
+The **National Football League (NFL)** is the premier professional American football league in the United States and one of the most popular sports organization in the world. Established in 1920 as the American Professional Football Association (APFA) and renamed the NFL in 1922, the league has grown into a cultural and economic powerhouse. It consists of 32 franchise, evenly splitted between the **American Football Conference (AFC)** and the **National Football Conference (NFC)**, each competing in a highly structured season followed by the **NFL Playoffs** and culminating in the globally renowned **Super Bowl**
+
+Beyond its sporting appeal, the NFL represents a rich source of data for performance analytics, sports economics, and fan engagement studies. Player statistics, team performance metrics, play-by-play data, and injury reports provide a detailed view of how the game evolves over time.
+
+## Objective
+
+
+## Data Description
+
+The dataset for this project was obtained using the nflreadr R package, a comprehensive interface for accessing public National Football League (NFL) data. The package aggregates data from reputable open-source repositories such as nflverse.com and pro-football-reference.com, providing a consistent, well-documented structure for analysis.
+
+The data encompasses multiple aspects of NFL games, including but not limited to:
+
+- Play-by-Play Data – detailed records of each play, including player actions, yardage gained or lost, penalties, and scoring outcomes.
+
+- Player Statistics – offensive, defensive, and special teams metrics for individual players across seasons.
+
+- Team Statistics – aggregated performance indicators such as wins, losses, points scored, and points allowed.
+
+- Schedules and Results – game dates, locations, participating teams, and final scores.
+
+- Injury Reports – weekly updates on player availability and injury status.
+- 
+The dataset spans multiple NFL seasons, offering both historical and current data. Variables are provided in a standardized format, with unique identifiers for games, plays, and players, enabling robust data linkage and longitudinal analysis.
+
+## Data Cleaning, Preparation and Analysis
+
+This phase of the project commenced with the importation of the necessary R libraries required for efficient data handling, transformation, visualization, and analysis. The core packages included:
+
+- nflreadr – for accessing and importing publicly available NFL datasets.
+
+- tidyverse – metapackage
+
+- janitor - for data cleaning
+
+Using the nflreadr package, the required dataset was imported directly into R; the play-by-play dataset to be precise. The play-by-play dataset for the chosen season was retrieved using the load_pbp() function. Upon loading, dataset structure and variable names were inspected using functions such as glimpse() and dim() to gain a preliminary understanding of its composition.
+
+Thereafter, the first ten rows of the dataset were examined using the head() function to understand the entries of each column. This inspection provided insight into the type of data contained in each variable, the consistency of entries, and potential areas requiring preprocessing. It was observed that entries(game_id) were duplicated to collect data for different play type(kick off, run, pass, punt, no_play, extra_point, field_goal, qb_kneel, qb_spike). Apparently, the dataset contains an exceptionally large number of rows due to its play-by-play structure, where each row represents a single play rather than a single game. During the course of this exploration, variables of interest were identified and selected for the analysis.  
+
+
+### Data Cleaning and Preparation
 ```{r c}
 pbp <- load_pbp(2023)
 plan("sequential")
-```
 
-### Exploring, selecting and inspecting the variables of interest 
-```{r d}
-#Exploring the whole dataset
+# dim(pbp)  # Investigating the number of rows and columns in the dataset
+# glimpse(pbp) # Investigating the properties of the dataset
+# head(pbp, n =10) # Inspecting the first 10 rows of the dataset
+# pbp %>%   # Investigating the number of duplicated entries
+  #get_dupes(game_id)
 
-dim(pbp)
-head(pbp)
+#is.na(pbp) # Investigating the columns with missing value
 
-# Selecting the variable of interest
-
-pbp_selected <- pbp %>% 
+pbp_selected <- pbp %>%  # Selecting the columns of interest
   select(game_id, week, home_team, away_team,season_type,game_date,result,home_score,away_score)
 
-#Inspecting the selected variables for missing values
+#pbp_selected %>% # Inspecting the home_team columns for inconsistency
+  #select(home_team) %>% 
+  #unique()
 
-pbp_selected %>% 
-  filter(is.na(week)) 
+#pbp_selected %>% # Inspecting the away_team columns for inconsistency
+  #select(away_team) %>% 
+  #unique()
 
-pbp_selected %>% 
-  filter(is.na(home_team))
+#pbp_selected %>% # Inspecting the season_type columns for inconsistency
+  #select(season_type) %>% 
+  #unique()
 
-pbp_selected %>% 
-  filter(is.na(away_team))
-
-pbp_selected %>% 
-  filter(is.na(season_type))
-
-pbp_selected %>% 
-  filter(is.na(game_date))
-
-pbp_selected %>% 
-  filter(is.na(result))
-
-pbp_selected %>% 
-  filter(is.na(home_score))
-
-pbp_selected %>% 
-  filter(is.na(away_score))
-
-# Inspecting the categorical variables from pbp_selected for inconsistency
-
-pbp_selected %>% 
-  select(home_team) %>% 
-  unique()
-
-pbp_selected %>% 
-  select(away_team) %>% 
-  unique()
-
-pbp_selected %>% 
-  select(season_type) %>% 
-  unique()
-
-# Dropping duplicate entries
-pbp_selected <- pbp_selected %>% 
+pbp_selected <- pbp_selected %>%  # Dropping duplicate entries
   unique()
 
 ```
+
 
 ### Analyzing the dataset to identify the team who won the SUPER BOWL
 
@@ -143,6 +139,7 @@ pbp_post_winners %>%  # filtering by week and selecting the winning team column 
 ```
 
 ### Calculating the point differential for the 2023/24 season
+
 ```{r f}
 pbp_selected_diff <- pbp_selected %>% 
   filter(season_type == "REG") %>% 
@@ -179,8 +176,8 @@ pbp_diff_comb
 write_csv(pbp_diff_comb, "poinit_diffential.csv")
 ```
 
-
 ### Visualizing the dataset
+
 ```{r g}
 pbp_ptdiff_comb <- read_csv("poinit_diffential.csv")
 
@@ -260,5 +257,3 @@ pbp_ptdiff_comb_modified %>%
   
 
 ```
-  
-
