@@ -8,7 +8,7 @@
 
 <meta name="author" content="Ayorinde Ayomide David">
 
-<title>Analysis of NFL Dataset – Ayorinde Ayomide David</title>
+<title>Statistical Evaluation of Home-Field Advantage in the NFL: A t-Test Comparison of Home and Away Scoring Patterns – Ayorinde Ayomide David</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -176,9 +176,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#data-cleaning-preparation-and-analysis" id="toc-data-cleaning-preparation-and-analysis" class="nav-link" data-scroll-target="#data-cleaning-preparation-and-analysis">Data Cleaning, Preparation and Analysis</a>
   <ul>
   <li><a href="#data-cleaning-and-preparation" id="toc-data-cleaning-and-preparation" class="nav-link" data-scroll-target="#data-cleaning-and-preparation">Data Cleaning and Preparation</a></li>
-  <li><a href="#analyzing-the-dataset-to-identify-the-team-who-won-the-super-bowl" id="toc-analyzing-the-dataset-to-identify-the-team-who-won-the-super-bowl" class="nav-link" data-scroll-target="#analyzing-the-dataset-to-identify-the-team-who-won-the-super-bowl">Analyzing the dataset to identify the team who won the SUPER BOWL</a></li>
-  <li><a href="#calculating-the-point-differential-for-the-202324-season" id="toc-calculating-the-point-differential-for-the-202324-season" class="nav-link" data-scroll-target="#calculating-the-point-differential-for-the-202324-season">Calculating the point differential for the 2023/24 season</a></li>
-  <li><a href="#visualizing-the-dataset" id="toc-visualizing-the-dataset" class="nav-link" data-scroll-target="#visualizing-the-dataset">Visualizing the dataset</a></li>
+  <li><a href="#data-analysis-and-visualization" id="toc-data-analysis-and-visualization" class="nav-link" data-scroll-target="#data-analysis-and-visualization">Data Analysis and Visualization</a>
+  <ul class="collapse">
+  <li><a href="#identifying-the-super-bowl-winner" id="toc-identifying-the-super-bowl-winner" class="nav-link" data-scroll-target="#identifying-the-super-bowl-winner">Identifying the Super Bowl Winner</a></li>
+  <li><a href="#visualizing-the-point-differential" id="toc-visualizing-the-point-differential" class="nav-link" data-scroll-target="#visualizing-the-point-differential">Visualizing the Point Differential</a></li>
+  </ul></li>
+  <li><a href="#exploring-the-relationship-between-goal-for-and-goal-against" id="toc-exploring-the-relationship-between-goal-for-and-goal-against" class="nav-link" data-scroll-target="#exploring-the-relationship-between-goal-for-and-goal-against">Exploring the Relationship Between Goal For and Goal Against</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -188,7 +191,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Analysis of NFL Dataset</h1>
+<h1 class="title">Statistical Evaluation of Home-Field Advantage in the NFL: A t-Test Comparison of Home and Away Scoring Patterns</h1>
   <div class="quarto-categories">
     <div class="quarto-category">code</div>
     <div class="quarto-category">analysis</div>
@@ -223,11 +226,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
-<p>The <strong>National Football League (NFL)</strong> is the premier professional American football league in the United States and one of the most popular sports organization in the world. Established in 1920 as the American Professional Football Association (APFA) and renamed the NFL in 1922, the league has grown into a cultural and economic powerhouse. It consists of 32 franchise, evenly splitted between the <strong>American Football Conference (AFC)</strong> and the <strong>National Football Conference (NFC)</strong>, each competing in a highly structured season followed by the <strong>NFL Playoffs</strong> and culminating in the globally renowned <strong>Super Bowl</strong></p>
-<p>Beyond its sporting appeal, the NFL represents a rich source of data for performance analytics, sports economics, and fan engagement studies. Player statistics, team performance metrics, play-by-play data, and injury reports provide a detailed view of how the game evolves over time.</p>
+<p>Home-field advantage has long been recognised as an important factor influencing team performance in the National Football League (NFL). Across seasons, teams tend to perform differently depending on whether they are playing in familiar, supportive environments or in the stadiums of their opponents. Quantifying this effect provides a useful means of assessing team performance and gaining insights into patterns in scoring behaviour. This study focuses specifically on comparing the goals scored at home and the goals scored away as a proxy for measuring the presence of home-field advantage. By employing the two-sample t-test as the primary statistical technique, the analysis seeks to determine whether the observed differences in scoring across venues are statistically significant. The findings are expected to contribute to a better understanding of performance dynamics in the NFL and provide an empirical basis for evaluating how much location influences team outcomes.</p>
 </section>
 <section id="objective" class="level2">
 <h2 class="anchored" data-anchor-id="objective">Objective</h2>
+<p>To gain meaningful insights into team performance across the NFL, it is essential to establish a clear analytical framework that captures both overall outcomes and venue-specific scoring patterns. Since home-field advantage plays a central role in this analysis, particular attention is placed on comparing team performance at home versus away. Accordingly, the study is guided by the following specific objectives:</p>
+<p><strong>Objectives of the Analysis</strong></p>
+<ul>
+<li><p>Identify the Super Bowl Winner by examining the dataset to determine which team emerged victorious in the postseason.</p></li>
+<li><p>Visualize Point Differential across teams in order to highlight disparities in aggregate performance and better understand how scoring margins differ across the league.</p></li>
+<li><p>Explore the Relationship Between Goals For and Goals Against by producing a scatter plot for each team to evaluate whether teams that score heavily also tend to concede more or less.</p></li>
+<li><p>Evaluate the Impact of Venue on Scoring Performance by conducting a two-sample t-test to determine whether there is a statistically significant difference between goals scored at home and goals scored away from home.</p></li>
+</ul>
 </section>
 <section id="data-description" class="level2">
 <h2 class="anchored" data-anchor-id="data-description">Data Description</h2>
@@ -288,8 +298,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </details>
 </div>
 </section>
-<section id="analyzing-the-dataset-to-identify-the-team-who-won-the-super-bowl" class="level3">
-<h3 class="anchored" data-anchor-id="analyzing-the-dataset-to-identify-the-team-who-won-the-super-bowl">Analyzing the dataset to identify the team who won the SUPER BOWL</h3>
+<section id="data-analysis-and-visualization" class="level3">
+<h3 class="anchored" data-anchor-id="data-analysis-and-visualization">Data Analysis and Visualization</h3>
+<section id="identifying-the-super-bowl-winner" class="level4">
+<h4 class="anchored" data-anchor-id="identifying-the-super-bowl-winner">Identifying the Super Bowl Winner</h4>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -313,9 +325,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 1 KC          </code></pre>
 </div>
 </div>
+<p>After thorough analysis of the dataset, it was found out that <strong>KC</strong> won the <strong>Super Bowl</strong> for the 2023/24 season</p>
 </section>
-<section id="calculating-the-point-differential-for-the-202324-season" class="level3">
-<h3 class="anchored" data-anchor-id="calculating-the-point-differential-for-the-202324-season">Calculating the point differential for the 2023/24 season</h3>
+<section id="visualizing-the-point-differential" class="level4">
+<h4 class="anchored" data-anchor-id="visualizing-the-point-differential">Visualizing the Point Differential</h4>
 <div class="cell">
 <details class="code-fold">
 <summary>Code</summary>
@@ -347,147 +360,60 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pf =</span> <span class="fu">sum</span>(pf), <span class="at">pa =</span> <span class="fu">sum</span>(pa), <span class="at">pt_diff =</span> pf <span class="sc">-</span> pa) <span class="sc">%&gt;%</span> </span>
 <span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="fu">unique</span>()</span>
 <span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>pbp_diff_comb</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 32 × 4
-# Groups:   team [32]
-   team     pf    pa pt_diff
-   &lt;chr&gt; &lt;int&gt; &lt;int&gt;   &lt;int&gt;
- 1 WAS     329   518    -189
- 2 NYJ     268   355     -87
- 3 ATL     321   373     -52
- 4 CLE     396   362      34
- 5 NYG     266   407    -141
- 6 KC      371   294      77
- 7 CHI     360   379     -19
- 8 BAL     483   280     203
- 9 IND     396   415     -19
-10 SEA     364   402     -38
-# ℹ 22 more rows</code></pre>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a csv file of point differential</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(pbp_diff_comb, <span class="st">"poinit_diffential.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-</div>
-</section>
-<section id="visualizing-the-dataset" class="level3">
-<h3 class="anchored" data-anchor-id="visualizing-the-dataset">Visualizing the dataset</h3>
-<div class="cell">
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"poinit_diffential.csv"</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>teams_colors_logos <span class="ot">&lt;-</span> <span class="fu">load_teams</span>()</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>teams_colors_logos_logo <span class="ot">&lt;-</span> teams_colors_logos <span class="sc">%&gt;%</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team_abbr,team_name,team_logo_espn,team_wordmark,team_color,team_color2)</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="ot">&lt;-</span> pbp_ptdiff_comb <span class="sc">%&gt;%</span> </span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(teams_colors_logos_logo, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"team"</span><span class="ot">=</span><span class="st">"team_abbr"</span>))</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">timeout =</span> <span class="dv">300</span>)</span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> <span class="fu">reorder</span>(team_name, pf),<span class="at">y =</span> pf)) <span class="sc">+</span></span>
-<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="at">fill =</span> team_color, <span class="at">colour =</span> team_color2), <span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
-<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_color_identity</span>(<span class="at">aesthetics =</span> <span class="fu">c</span>(<span class="st">"fill"</span>,<span class="st">"color"</span>)) <span class="sc">+</span></span>
-<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">y =</span> pf <span class="sc">+</span> <span class="dv">11</span>, <span class="at">image =</span> team_logo_espn), </span>
-<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">16</span><span class="sc">/</span><span class="dv">9</span>, <span class="at">size =</span> <span class="fl">0.025</span>) <span class="sc">+</span></span>
-<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Team"</span>,</span>
-<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"PF"</span>,</span>
-<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"Bar chart of Total Points Scored by Each Team"</span>,</span>
-<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"2023 Season W1 - W18 | Data via NFLReadr"</span>,</span>
-<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="st">"Ayorinde Ayomide David"</span>) <span class="sc">+</span></span>
-<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>,</span>
-<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">face =</span> <span class="st">"bold"</span>,</span>
-<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>),</span>
-<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a csv file of point differential</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(pbp_diff_comb, <span class="st">"poinit_diffential.csv"</span>)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"poinit_diffential.csv"</span>)</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>teams_colors_logos <span class="ot">&lt;-</span> <span class="fu">load_teams</span>()</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>teams_colors_logos_logo <span class="ot">&lt;-</span> teams_colors_logos <span class="sc">%&gt;%</span> </span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(team_abbr,team_name,team_logo_espn,team_wordmark,team_color,team_color2)</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="ot">&lt;-</span> pbp_ptdiff_comb <span class="sc">%&gt;%</span> </span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(teams_colors_logos_logo, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"team"</span><span class="ot">=</span><span class="st">"team_abbr"</span>))</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(team_wordmark,pf,pa,pt_diff) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>pt_diff) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_img_rows</span>(team_wordmark) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">team_wordmark =</span> <span class="st">"Team"</span>,</span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>             <span class="at">pf =</span> <span class="st">"PF"</span>,</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>             <span class="at">pa =</span> <span class="st">"PA"</span>,</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>             <span class="at">pt_diff =</span> <span class="st">"PD"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_align</span>(<span class="at">align =</span> <span class="st">"center"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_theme_espn</span>() <span class="sc">%&gt;%</span> </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Team Point Differentials 2023/24 Season"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> <span class="fu">c</span>(pt_diff),</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>             <span class="at">target_columns =</span> <span class="fu">c</span>(pt_diff),</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>             <span class="at">colors =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>               <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"tomato3"</span>, <span class="st">"green4"</span>),</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>               <span class="at">domain =</span> <span class="cn">NULL</span></span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>             ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/g-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pf,</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> pa)) <span class="sc">+</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image =</span> team_logo_espn),</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">16</span><span class="sc">/</span><span class="dv">19</span>,</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.04</span>) <span class="sc">+</span></span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Point For"</span>,</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Point Against"</span>,</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"NFL Points For and Against"</span>,</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"2023 Season W1-W18 | Data via NFLReadr"</span>,</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span> <span class="st">"Ayorinde Ayomide David"</span>) <span class="sc">+</span></span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, </span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">face =</span> <span class="st">"bold"</span>,</span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">20</span>),</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="index_files/figure-html/g-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<details class="code-fold">
-<summary>Code</summary>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reframe</span>(team_wordmark,pf,pa,pt_diff) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="sc">-</span>pt_diff) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_img_rows</span>(team_wordmark) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_label</span>(<span class="at">team_wordmark =</span> <span class="st">"Team"</span>,</span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">pf =</span> <span class="st">"PF"</span>,</span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">pa =</span> <span class="st">"PA"</span>,</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>             <span class="at">pt_diff =</span> <span class="st">"PD"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cols_align</span>(<span class="at">align =</span> <span class="st">"center"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">gt_theme_espn</span>() <span class="sc">%&gt;%</span> </span>
-<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">tab_header</span>(<span class="at">title =</span> <span class="st">"Team Point Differentials 2023/24 Season"</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data_color</span>(<span class="at">columns =</span> <span class="fu">c</span>(pt_diff),</span>
-<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>             <span class="at">target_columns =</span> <span class="fu">c</span>(pt_diff),</span>
-<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">colors =</span> scales<span class="sc">::</span><span class="fu">col_numeric</span>(</span>
-<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>               <span class="at">palette =</span> <span class="fu">c</span>(<span class="st">"tomato3"</span>, <span class="st">"green4"</span>),</span>
-<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>               <span class="at">domain =</span> <span class="cn">NULL</span></span>
-<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>             ))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</details>
-<div class="cell-output-display">
-<div id="pjcnnzpeox" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+<div id="cbhgdmzmru" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
 <style>@import url("https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-#pjcnnzpeox table {
+#cbhgdmzmru table {
   font-family: Lato, system-ui, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-#pjcnnzpeox thead, #pjcnnzpeox tbody, #pjcnnzpeox tfoot, #pjcnnzpeox tr, #pjcnnzpeox td, #pjcnnzpeox th {
+#cbhgdmzmru thead, #cbhgdmzmru tbody, #cbhgdmzmru tfoot, #cbhgdmzmru tr, #cbhgdmzmru td, #cbhgdmzmru th {
   border-style: none;
 }
 
-#pjcnnzpeox p {
+#cbhgdmzmru p {
   margin: 0;
   padding: 0;
 }
 
-#pjcnnzpeox .gt_table {
+#cbhgdmzmru .gt_table {
   display: table;
   border-collapse: collapse;
   line-height: normal;
@@ -513,12 +439,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-left-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_caption {
+#cbhgdmzmru .gt_caption {
   padding-top: 4px;
   padding-bottom: 4px;
 }
 
-#pjcnnzpeox .gt_title {
+#cbhgdmzmru .gt_title {
   color: #333333;
   font-size: 24px;
   font-weight: initial;
@@ -530,7 +456,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-width: 0;
 }
 
-#pjcnnzpeox .gt_subtitle {
+#cbhgdmzmru .gt_subtitle {
   color: #333333;
   font-size: 85%;
   font-weight: initial;
@@ -542,7 +468,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-width: 0;
 }
 
-#pjcnnzpeox .gt_heading {
+#cbhgdmzmru .gt_heading {
   background-color: #FFFFFF;
   text-align: left;
   border-bottom-color: #FFFFFF;
@@ -554,13 +480,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_bottom_border {
+#cbhgdmzmru .gt_bottom_border {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_col_headings {
+#cbhgdmzmru .gt_col_headings {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -575,7 +501,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_col_heading {
+#cbhgdmzmru .gt_col_heading {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -595,7 +521,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pjcnnzpeox .gt_column_spanner_outer {
+#cbhgdmzmru .gt_column_spanner_outer {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -607,15 +533,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 4px;
 }
 
-#pjcnnzpeox .gt_column_spanner_outer:first-child {
+#cbhgdmzmru .gt_column_spanner_outer:first-child {
   padding-left: 0;
 }
 
-#pjcnnzpeox .gt_column_spanner_outer:last-child {
+#cbhgdmzmru .gt_column_spanner_outer:last-child {
   padding-right: 0;
 }
 
-#pjcnnzpeox .gt_column_spanner {
+#cbhgdmzmru .gt_column_spanner {
   border-bottom-style: solid;
   border-bottom-width: 2px;
   border-bottom-color: #D3D3D3;
@@ -627,11 +553,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   width: 100%;
 }
 
-#pjcnnzpeox .gt_spanner_row {
+#cbhgdmzmru .gt_spanner_row {
   border-bottom-style: hidden;
 }
 
-#pjcnnzpeox .gt_group_heading {
+#cbhgdmzmru .gt_group_heading {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -657,7 +583,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   text-align: left;
 }
 
-#pjcnnzpeox .gt_empty_group_heading {
+#cbhgdmzmru .gt_empty_group_heading {
   padding: 0.5px;
   color: #333333;
   background-color: #FFFFFF;
@@ -672,15 +598,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: middle;
 }
 
-#pjcnnzpeox .gt_from_md > :first-child {
+#cbhgdmzmru .gt_from_md > :first-child {
   margin-top: 0;
 }
 
-#pjcnnzpeox .gt_from_md > :last-child {
+#cbhgdmzmru .gt_from_md > :last-child {
   margin-bottom: 0;
 }
 
-#pjcnnzpeox .gt_row {
+#cbhgdmzmru .gt_row {
   padding-top: 7px;
   padding-bottom: 7px;
   padding-left: 5px;
@@ -699,7 +625,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   overflow-x: hidden;
 }
 
-#pjcnnzpeox .gt_stub {
+#cbhgdmzmru .gt_stub {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 80%;
@@ -712,7 +638,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pjcnnzpeox .gt_stub_row_group {
+#cbhgdmzmru .gt_stub_row_group {
   color: #333333;
   background-color: #FFFFFF;
   font-size: 100%;
@@ -726,15 +652,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   vertical-align: top;
 }
 
-#pjcnnzpeox .gt_row_group_first td {
+#cbhgdmzmru .gt_row_group_first td {
   border-top-width: 2px;
 }
 
-#pjcnnzpeox .gt_row_group_first th {
+#cbhgdmzmru .gt_row_group_first th {
   border-top-width: 2px;
 }
 
-#pjcnnzpeox .gt_summary_row {
+#cbhgdmzmru .gt_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -744,16 +670,16 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pjcnnzpeox .gt_first_summary_row {
+#cbhgdmzmru .gt_first_summary_row {
   border-top-style: solid;
   border-top-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_first_summary_row.thick {
+#cbhgdmzmru .gt_first_summary_row.thick {
   border-top-width: 2px;
 }
 
-#pjcnnzpeox .gt_last_summary_row {
+#cbhgdmzmru .gt_last_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -763,7 +689,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_grand_summary_row {
+#cbhgdmzmru .gt_grand_summary_row {
   color: #333333;
   background-color: #FFFFFF;
   text-transform: inherit;
@@ -773,7 +699,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pjcnnzpeox .gt_first_grand_summary_row {
+#cbhgdmzmru .gt_first_grand_summary_row {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -783,7 +709,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-top-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_last_grand_summary_row_top {
+#cbhgdmzmru .gt_last_grand_summary_row_top {
   padding-top: 8px;
   padding-bottom: 8px;
   padding-left: 5px;
@@ -793,11 +719,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_striped {
+#cbhgdmzmru .gt_striped {
   background-color: #FAFAFA;
 }
 
-#pjcnnzpeox .gt_table_body {
+#cbhgdmzmru .gt_table_body {
   border-top-style: solid;
   border-top-width: 2px;
   border-top-color: #D3D3D3;
@@ -806,7 +732,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-bottom-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_footnotes {
+#cbhgdmzmru .gt_footnotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -820,7 +746,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_footnote {
+#cbhgdmzmru .gt_footnote {
   margin: 0px;
   font-size: 90%;
   padding-top: 4px;
@@ -829,7 +755,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pjcnnzpeox .gt_sourcenotes {
+#cbhgdmzmru .gt_sourcenotes {
   color: #333333;
   background-color: #FFFFFF;
   border-bottom-style: none;
@@ -843,7 +769,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   border-right-color: #D3D3D3;
 }
 
-#pjcnnzpeox .gt_sourcenote {
+#cbhgdmzmru .gt_sourcenote {
   font-size: 12px;
   padding-top: 4px;
   padding-bottom: 4px;
@@ -851,72 +777,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   padding-right: 5px;
 }
 
-#pjcnnzpeox .gt_left {
+#cbhgdmzmru .gt_left {
   text-align: left;
 }
 
-#pjcnnzpeox .gt_center {
+#cbhgdmzmru .gt_center {
   text-align: center;
 }
 
-#pjcnnzpeox .gt_right {
+#cbhgdmzmru .gt_right {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-#pjcnnzpeox .gt_font_normal {
+#cbhgdmzmru .gt_font_normal {
   font-weight: normal;
 }
 
-#pjcnnzpeox .gt_font_bold {
+#cbhgdmzmru .gt_font_bold {
   font-weight: bold;
 }
 
-#pjcnnzpeox .gt_font_italic {
+#cbhgdmzmru .gt_font_italic {
   font-style: italic;
 }
 
-#pjcnnzpeox .gt_super {
+#cbhgdmzmru .gt_super {
   font-size: 65%;
 }
 
-#pjcnnzpeox .gt_footnote_marks {
+#cbhgdmzmru .gt_footnote_marks {
   font-size: 75%;
   vertical-align: 0.4em;
   position: initial;
 }
 
-#pjcnnzpeox .gt_asterisk {
+#cbhgdmzmru .gt_asterisk {
   font-size: 100%;
   vertical-align: 0;
 }
 
-#pjcnnzpeox .gt_indent_1 {
+#cbhgdmzmru .gt_indent_1 {
   text-indent: 5px;
 }
 
-#pjcnnzpeox .gt_indent_2 {
+#cbhgdmzmru .gt_indent_2 {
   text-indent: 10px;
 }
 
-#pjcnnzpeox .gt_indent_3 {
+#cbhgdmzmru .gt_indent_3 {
   text-indent: 15px;
 }
 
-#pjcnnzpeox .gt_indent_4 {
+#cbhgdmzmru .gt_indent_4 {
   text-indent: 20px;
 }
 
-#pjcnnzpeox .gt_indent_5 {
+#cbhgdmzmru .gt_indent_5 {
   text-indent: 25px;
 }
 
-#pjcnnzpeox .katex-display {
+#cbhgdmzmru .katex-display {
   display: inline-flex !important;
   margin-bottom: 0.75em !important;
 }
 
-#pjcnnzpeox div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
+#cbhgdmzmru div.Reactable > div.rt-table > div.rt-thead > div.rt-tr.rt-tr-group-header > div.rt-th-group:after {
   height: 0px !important;
 }
 </style>
@@ -1130,6 +1056,609 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </table>
 
 </div>
+</div>
+</div>
+</section>
+</section>
+<section id="exploring-the-relationship-between-goal-for-and-goal-against" class="level3">
+<h3 class="anchored" data-anchor-id="exploring-the-relationship-between-goal-for-and-goal-against">Exploring the Relationship Between Goal For and Goal Against</h3>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pbp_ptdiff_comb_modified <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="at">mapping =</span> <span class="fu">aes</span>(<span class="at">x =</span> pf,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y =</span> pa)) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">50</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">100</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">150</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">intercept =</span> <span class="sc">-</span><span class="dv">200</span>, <span class="at">color =</span> <span class="st">"grey"</span>, <span class="at">alpha =</span> <span class="fl">0.5</span>)<span class="sc">+</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_reverse</span>() <span class="sc">+</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_image</span>(<span class="fu">aes</span>(<span class="at">image =</span> team_logo_espn),</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>             <span class="at">asp =</span> <span class="dv">16</span><span class="sc">/</span><span class="dv">19</span>,</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">size =</span> <span class="fl">0.04</span>) <span class="sc">+</span></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Point For"</span>,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Point Against"</span>,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">title =</span> <span class="st">"NFL Points For and Against"</span>,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>       <span class="at">subtitle =</span> <span class="st">"2023 Season W1-W18 | Data via NFLReadr"</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption=</span> <span class="st">"Source: NFLReadr"</span>) <span class="sc">+</span></span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>, </span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">face =</span> <span class="st">"bold"</span>,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>                                  <span class="at">size =</span> <span class="dv">20</span>),</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.subtitle =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="fl">0.5</span>)</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>team_t_test <span class="ot">&lt;-</span> <span class="cf">function</span>(team_abbr) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  home_scores <span class="ot">&lt;-</span> pbp_selected_diff <span class="sc">%&gt;%</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(home_team <span class="sc">==</span> team_abbr) <span class="sc">%&gt;%</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">pull</span>(home_score)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  away_scores <span class="ot">&lt;-</span> pbp_selected_diff <span class="sc">%&gt;%</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">filter</span>(away_team <span class="sc">==</span> team_abbr) <span class="sc">%&gt;%</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">pull</span>(away_score)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">t.test</span>(home_scores, away_scores,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>         <span class="at">conf.level =</span> <span class="fl">0.95</span>,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">alternative =</span> <span class="st">"two.sided"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">team_t_test</span>(<span class="st">"WAS"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Welch Two Sample t-test
+
+data:  home_scores and away_scores
+t = -1.4707, df = 14.969, p-value = 0.1621
+alternative hypothesis: true difference in means is not equal to 0
+95 percent confidence interval:
+ -15.513484   2.846817
+sample estimates:
+mean of x mean of y 
+ 16.00000  22.33333 </code></pre>
 </div>
 </div>
 

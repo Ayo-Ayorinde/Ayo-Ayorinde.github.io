@@ -43,6 +43,8 @@ options(timeout = 300) # Timeout of 60secs was reached without the dataset being
 
 ```
 
+
+
 ![](nfl.jpg){fig-align="center"}
 
 ## Introduction
@@ -99,6 +101,8 @@ Thereafter, the first ten rows of the dataset were examined using the head() fun
 
 
 ### Data Cleaning and Preparation
+
+
 ```{r c}
 pbp <- load_pbp(2023)
 plan("sequential")
@@ -132,9 +136,13 @@ pbp_selected <- pbp_selected %>%  # Dropping duplicate entries
 ```
 
 
+
+
 ### Data Analysis and Visualization
 
 #### Identifying the Super Bowl Winner
+
+
 
 ```{r e}
 pbp_selected_post <- pbp_selected %>% # Filtering the dataset to include only SUPER BOWL matches
@@ -151,10 +159,14 @@ pbp_post_winners %>%  # filtering by week and selecting the winning team column 
   select(winning_team)
 ```
 
+
+
 After thorough analysis of the dataset, it was found out that **KC** won the **Super Bowl** for the 2023/24 season
 
 
 #### Visualizing the Point Differential
+
+
 
 ```{r}
 pbp_selected_diff <- pbp_selected %>% 
@@ -222,7 +234,11 @@ pbp_ptdiff_comb_modified %>%
 ```
 
 
+
+
 ### Exploring the Relationship Between Goal For and Goal Against
+
+
 ```{r}
 pbp_ptdiff_comb_modified %>% 
   ggplot(mapping = aes(x = pf,
@@ -255,7 +271,11 @@ pbp_ptdiff_comb_modified %>%
 ```
 
 
+
+
 ### Evaluating the Impact of Venue on Scoring Performance
+
+
 
 ```{r}
 
@@ -277,200 +297,328 @@ team_t_test <- function(team_abbr) {
 }
 ```
 
+
+
 H0: There is no significant difference between goals scored at home and away
 H1: There is a significant difference between goals scored at home and away
 
 - **Washington Commanders**
+
+
 
 ```{r}
 team_t_test("WAS")
 
 ```
 
+
+
 - **New York Jet**
+
+
 ```{r}
 team_t_test("NYJ")
 
 ```
 
+
+
 - **Atlanta Falcons**
+
+
 ```{r}
 team_t_test("ATL")
 
 ```
 
+
+
 - **Cleveland Browns**
+
+
 ```{r}
 team_t_test("CLE")
 
 ```
 
+
+
 - **New York Giants**
+
+
 ```{r}
 team_t_test("NYG")
 
 ```
 
+
+
 - **Kansas City Chief**
+
+
 ```{r}
 team_t_test("KC")
 
 ```
 
+
+
 - **Chicago Bears**
+
+
 ```{r}
 team_t_test("CHI")
 
 ```
 
+
+
 - **Baltimore Ravens**
+
+
 ```{r}
 team_t_test("BAL")
 
 ```
 
+
+
 - **Indianapolis Colts**
+
+
 ```{r}
 team_t_test("IND")
 
 ```
 
+
+
 - **Seattle Seahawks**
+
+
 ```{r}
 team_t_test("SEA")
 
 ```
 
+
+
 - **Denver Broncos**
+
+
 ```{r}
 team_t_test("DEN")
 
 ```
 
+
+
 - **Los Angeles Chargers**
+
+
 ```{r}
 team_t_test("LAC")
 
 ```
 
 
+
+
 - **New England Patriot**
+
+
 ```{r}
 team_t_test("NE")
 
 ```
 
 
+
+
 - **Pittsburgh Steelers**
+
+
 ```{r}
 team_t_test("PIT")
 
 ```
 
+
+
 - **Minnesota Viking**
+
+
 ```{r}
 team_t_test("MIN")
 
 ```
 
+
+
 - **New Orleans Saint**
+
+
 ```{r}
 team_t_test("NO")
 
 ```
 
+
+
 - **Cincinnati Bengals**
+
+
 ```{r}
 team_t_test("CIN")
 
 ```
 
+
+
 - **Tampa Bay Bucaneers**
+
+
 ```{r}
 team_t_test("TB")
 
 ```
 
+
+
 - **Houston Texas**
+
+
 ```{r}
 team_t_test("HOU")
 
 ```
 
+
+
 - **Jacksonville Jaguars**
+
+
 ```{r}
 team_t_test("JAX")
 
 ```
 
+
+
 - **Tennesse Titans**
+
+
 ```{r}
 team_t_test("TEN")
 
 ```
 
+
+
 - **Buffalo Bills**
+
+
 ```{r}
 team_t_test("BUF")
 
 ```
 
+
+
 - **Philadelphia Eagles**
+
+
 ```{r}
 team_t_test("PHI")
 
 ```
+
+
 
 - **Carolina Panthers**
+
+
 ```{r}
 team_t_test("PHI")
 
 ```
+
+
 
 
 - **Arizona Cardinals**
+
+
 ```{r}
 team_t_test("ARI")
 
 ```
 
+
+
 - **Dallas Cowboys**
+
+
 ```{r}
 team_t_test("DAL")
 
 ```
 
+
+
 - **Detriot Lions**
+
+
 ```{r}
 team_t_test("DET")
 
 ```
 
+
+
 - **Los Angeles Rams**
+
+
 ```{r}
 team_t_test("LA")
 
 ```
 
+
+
 - **Miami Dolphins**
+
+
 ```{r}
 team_t_test("MIA")
 
 ```
 
+
+
 - **Green Bay Packers**
+
+
 ```{r}
 team_t_test("GB")
 
 ```
 
+
+
 - **San Francisco 49ers**
+
+
 ```{r}
 team_t_test("SF")
 
 ```
 
+
+
 - **Las Vegas Raiders**
+
+
 ```{r}
 team_t_test("LV")
 
