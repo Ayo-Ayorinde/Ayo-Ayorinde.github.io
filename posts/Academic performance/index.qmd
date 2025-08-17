@@ -242,9 +242,9 @@ Because both variables, college and class of degree, are categorical, visual ins
 
 #### Chi-Square Test of independence
 
-H~o~: There is no association between gender and academic achievement.
+H~o~: There is no association between college and academic achievement.
 
-H~1~: There is association between gender and academic achievement.
+H~1~: There is association between college and academic achievement.
 
 ```{r}
 tab <- nysc_list_modified_cleaned %>% #Parsing college and class of grade into a table
