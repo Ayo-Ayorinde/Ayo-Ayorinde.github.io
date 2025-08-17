@@ -32,6 +32,7 @@ pacman::p_load(tidyverse, #R meta-package
                gt, # R library for interactive tables
                ggimage, # R library  
                gtExtras,
+               here,
                future,
                visdat,
                janitor,
@@ -82,7 +83,7 @@ The data encompasses multiple aspects of NFL games, including but not limited to
 - Schedules and Results – game dates, locations, participating teams, and final scores.
 
 - Injury Reports – weekly updates on player availability and injury status.
-- 
+
 The dataset spans multiple NFL seasons, offering both historical and current data. Variables are provided in a standardized format, with unique identifiers for games, plays, and players, enabling robust data linkage and longitudinal analysis.
 
 ## Data Cleaning, Preparation and Analysis
@@ -302,7 +303,7 @@ team_t_test <- function(team_abbr) {
 H0: There is no significant difference between goals scored at home and away
 H1: There is a significant difference between goals scored at home and away
 
-- **Washington Commanders**
+##### Washington Commanders
 
 
 
@@ -312,8 +313,11 @@ team_t_test("WAS")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **New York Jet**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### New York Jet
 
 
 ```{r}
@@ -322,8 +326,11 @@ team_t_test("NYJ")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Atlanta Falcons**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Atlanta Falcons
 
 
 ```{r}
@@ -332,8 +339,11 @@ team_t_test("ATL")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Cleveland Browns**
+- Conclusion: Since the p-value is less than 0.05, we reject null hypothesis and conclude that there is significant difference between the goal scored at home and away
+
+##### Cleveland Browns
 
 
 ```{r}
@@ -342,8 +352,12 @@ team_t_test("CLE")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **New York Giants**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+
+##### New York Giants
 
 
 ```{r}
@@ -352,8 +366,11 @@ team_t_test("NYG")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Kansas City Chief**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Kansas City Chief
 
 
 ```{r}
@@ -362,8 +379,11 @@ team_t_test("KC")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Chicago Bears**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Chicago Bears
 
 
 ```{r}
@@ -372,8 +392,11 @@ team_t_test("CHI")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Baltimore Ravens**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Baltimore Ravens
 
 
 ```{r}
@@ -382,8 +405,11 @@ team_t_test("BAL")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Indianapolis Colts**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Indianapolis Colts
 
 
 ```{r}
@@ -392,8 +418,11 @@ team_t_test("IND")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Seattle Seahawks**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Seattle Seahawks
 
 
 ```{r}
@@ -402,8 +431,11 @@ team_t_test("SEA")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Denver Broncos**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Denver Broncos
 
 
 ```{r}
@@ -412,8 +444,11 @@ team_t_test("DEN")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Los Angeles Chargers**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Los Angeles Chargers
 
 
 ```{r}
@@ -422,9 +457,11 @@ team_t_test("LAC")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
 
-- **New England Patriot**
+##### New England Patriot
 
 
 ```{r}
@@ -433,9 +470,12 @@ team_t_test("NE")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
+
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
 
 
-- **Pittsburgh Steelers**
+##### Pittsburgh Steelers
 
 
 ```{r}
@@ -444,8 +484,11 @@ team_t_test("PIT")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Minnesota Viking**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Minnesota Viking
 
 
 ```{r}
@@ -454,8 +497,11 @@ team_t_test("MIN")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **New Orleans Saint**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### New Orleans Saint
 
 
 ```{r}
@@ -464,8 +510,11 @@ team_t_test("NO")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Cincinnati Bengals**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Cincinnati Bengals
 
 
 ```{r}
@@ -474,8 +523,11 @@ team_t_test("CIN")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Tampa Bay Bucaneers**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Tampa Bay Bucaneers
 
 
 ```{r}
@@ -484,8 +536,11 @@ team_t_test("TB")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Houston Texas**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Houston Texas
 
 
 ```{r}
@@ -494,8 +549,11 @@ team_t_test("HOU")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Jacksonville Jaguars**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Jacksonville Jaguars
 
 
 ```{r}
@@ -504,8 +562,11 @@ team_t_test("JAX")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Tennesse Titans**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Tennesse Titans
 
 
 ```{r}
@@ -514,8 +575,11 @@ team_t_test("TEN")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Buffalo Bills**
+- Conclusion: Since the p-value is less than 0.05, we reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away.
+
+##### Buffalo Bills
 
 
 ```{r}
@@ -524,18 +588,11 @@ team_t_test("BUF")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Philadelphia Eagles**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
 
-
-```{r}
-team_t_test("PHI")
-
-```
-
-
-
-- **Carolina Panthers**
+##### Philadelphia Eagles
 
 
 ```{r}
@@ -544,9 +601,24 @@ team_t_test("PHI")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
+
+- Conclusion: Since the p-value is less than 0.05, we  reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Carolina Panthers
 
 
-- **Arizona Cardinals**
+```{r}
+team_t_test("CAR")
+
+```
+
+
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
+
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Arizona Cardinals
 
 
 ```{r}
@@ -555,8 +627,11 @@ team_t_test("ARI")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Dallas Cowboys**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Dallas Cowboys
 
 
 ```{r}
@@ -565,8 +640,11 @@ team_t_test("DAL")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Detriot Lions**
+- Conclusion: Since the p-value is less than 0.05, we reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Detriot Lions
 
 
 ```{r}
@@ -575,8 +653,12 @@ team_t_test("DET")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Los Angeles Rams**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away.
+
+
+##### Los Angeles Rams
 
 
 ```{r}
@@ -585,8 +667,11 @@ team_t_test("LA")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Miami Dolphins**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Miami Dolphins
 
 
 ```{r}
@@ -595,8 +680,11 @@ team_t_test("MIA")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Green Bay Packers**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Green Bay Packers
 
 
 ```{r}
@@ -605,8 +693,11 @@ team_t_test("GB")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **San Francisco 49ers**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### San Francisco 49ers
 
 
 ```{r}
@@ -615,12 +706,67 @@ team_t_test("SF")
 ```
 
 
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
 
-- **Las Vegas Raiders**
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+##### Las Vegas Raiders
 
 
 ```{r}
 team_t_test("LV")
 
 ```
+
+
+- Decision rule: If p-value is greater than 0.05, we fail to reject null hypothesis, otherwise, we reject null hypothesis
+
+- Conclusion: Since the p-value is greater than 0.05, we fail to reject null hypothesis and conclude that there is no significant difference between the goal scored at home and away
+
+
+
+Overall, the majority of the teams have p–values greater than 0.05, which indicates that there is no statistically significant difference between the average number of goals scored at home and the average number scored away. In other words, for most teams, performance does not appear to depend strongly on venue, at least based on goal scoring.
+
+However, there are a few notable exceptions where the p-value is below 0.05, suggesting a significant home-field effect:
+
+
+
+```{r}
+home_away_summary <- data.frame(
+  Team = c("ATL", "TEN", "PHI", "DAL"),
+  p_value = c(0.00258, 0.01512, 0.01006, 0.01342),
+  mean_home = c(24.00, 22.67, 30.88, 37.38),
+  mean_away = c(14.33, 12.63, 20.67, 23.33),
+  Interpretation = c("Scores significantly more at home",
+                     "Scores significantly more at home",
+                     "Scores significantly more at home",
+                     "Scores significantly more at home")
+)
+
+home_away_summary %>%
+  gt() %>%
+  fmt_number(
+    columns = c(p_value, mean_home, mean_away),
+    decimals = 4
+  ) %>%
+  cols_label(
+    Team = "Team",
+    p_value = "p-value",
+    mean_home = "Mean (Home)",
+    mean_away = "Mean (Away)",
+    Interpretation = "Interpretation"
+  )
+```
+
+
+
+These teams have both (i) p-values below 0.05 and (ii) mean home scores that are substantially higher than mean away scores. This provides statistical evidence of a home-field advantage in scoring for those teams.
+
+For a few other teams (e.g., WAS and ARI), the p-values are relatively close to 0.05 (e.g., 0.1621 and 0.06047 respectively). Although these are not statistically significant, they may suggest a weak trend and could become significant with more data.
+
+
+## Conclusion
+
+The results suggest that home-field advantage in goal scoring is not universal across the league. Only a few teams (such as ATL, TEN, PHI, and DAL) show a statistically significant increase in scoring at home, while for most teams the venue does not appear to influence scoring performance.
+
 
