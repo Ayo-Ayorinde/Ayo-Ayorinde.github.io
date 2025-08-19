@@ -39,8 +39,6 @@ pacman::p_load(tidyverse, #R meta-package
                inspectdf, # R library for visual EDA
                gtsummary) # R library for descriptive EDA
 
-plan("multisession")
-options(timeout = 300) # Timeout of 60secs was reached without the dataset being loaded. Hence, the need to manually increase the timeout limit to  5 mins
 
 ```
 
@@ -101,7 +99,10 @@ Thereafter, the first ten rows of the dataset were examined using the head() fun
 
 ### Data Cleaning and Preparation
 ```{r c}
-pbp <- load_pbp(2023)
+plan("multisession")
+options(timeout = 300) # Timeout of 60secs was reached without the dataset being loaded. Hence, the need to manually increase the timeout limit to  5 mins
+
+pbp <- load_pbp(seasons = 2023)
 plan("sequential")
 
 # dim(pbp)  # Investigating the number of rows and columns in the dataset
